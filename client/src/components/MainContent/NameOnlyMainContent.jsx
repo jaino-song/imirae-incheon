@@ -1,0 +1,88 @@
+import { useState } from "react";
+import styled from "@emotion/styled";
+import FormContainer from "../FormContainer/FormContainer";
+
+const NameOnlyMainContent = (props) => {
+    const [showMsg, setShowMsg] = useState(false);
+    const [msg, setMsg] = useState('');
+
+    const handleNameChange = (e) => {
+        const name = e.target.value;
+        // Replace {name} in the template with the actual name
+        const completedMsg = props.preText.replace('{name}', name);
+        setMsg(completedMsg);
+    };
+
+    const handleCreateMsgButton = () => {
+        setShowMsg(true);
+    }
+
+    const handleEnterPress = (e) => {
+        if (e.key === 'Enter') {
+            setShowMsg(true);
+        }
+    }
+
+    return (
+        <Container>
+            <Title>{props.title}</Title>
+            <Description>{props.desc}</Description>
+
+            <InputField 
+                type="text"
+                placeholder="산모님 이름을 입력하세요"
+                onChange={handleNameChange}
+                onKeyDown={handleEnterPress}
+            />
+            <CreateMsgButton onClick={handleCreateMsgButton}>
+                메시지 생성
+            </CreateMsgButton>
+
+            { showMsg ? <FormContainer msg={msg} /> : null }
+        </Container>
+    );
+};
+
+// Styled components
+const Container = styled.div`
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+`;
+
+const Title = styled.h1`
+    color: #007bff;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+`;
+
+const Description = styled.p`
+    color: #6c757d;
+    margin-bottom: 2rem;
+`;
+
+const InputField = styled.input`
+    padding: 0.5rem;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+`;
+
+const CreateMsgButton = styled.button`
+    padding: 0.5rem 1rem;
+    margin: 2rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: #0056b3;
+    }
+`
+
+export default NameOnlyMainContent;
