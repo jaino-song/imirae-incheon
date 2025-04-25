@@ -258,14 +258,4 @@ const H4 = styled.h4`
 
 `
 
-export const loader = async () => {
-    // Fetch data from your backend or return static data
-    return {
-        price: "1,000,000",
-        account_number: "123-456-789",
-        bank_name: "국민은행",
-        area: "인천아이미래로"
-    };
-}
-
 export default PriceMainContent;

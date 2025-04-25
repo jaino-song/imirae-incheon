@@ -1,5 +1,4 @@
-import { useLoaderData } from "react-router-dom";
-import PriceMainContent, { loader } from "../MainContent/PriceMainContent";
+import PriceMainContent from "../MainContent/PriceMainContent";
 
 const PriceInfo = () => {
     const preText = `[인천 아이미래로]
@@ -138,4 +137,3 @@ export const areaOptions = [
 ]
 
 export default PriceInfo;
-export { loader };
