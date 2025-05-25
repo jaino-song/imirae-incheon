@@ -46,8 +46,7 @@ const PriceMainContent = (props) => {
     };
 
     const handleNameChange = (e) => {
-        const name = e.target.value;
-        setCustomerName(name);
+        setCustomerName(e.target.value);
     };
 
     const handleCreateMsgButton = async () => {

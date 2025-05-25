@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { loadScripts } from "../hooks/useDocAPI";
 
 const CustomerContract = () => {
-  useEffect(() => {
+    const [customerNmae, setCustomerName] = useState('');
+    useEffect(() => {
 
     loadScripts();
 
@@ -11,6 +12,14 @@ const CustomerContract = () => {
       scripts.forEach(script => script.remove());
     };
   }, []); // Empty dependency array means this runs once on mount
+
+  const handleNameChange = (e) => {
+    setCustomerName(e.target.value);
+  }
+
+  const handleEnterPress = (e) => {
+    setCustomerName(e.target.value);
+  }
 
   return (
     <div>
