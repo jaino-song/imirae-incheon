@@ -1,13 +1,10 @@
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
+import LinkButton from "../Buttons/LinkButton";
 
 const NavButton = ({ link, children }) => {
     return (
-        <Link to={link}>
-            <Button>
-                <H3>{ children }</H3>
-            </Button>
-        </Link>
+        <LinkButton routeLink={link} TextStyle={H3} BtnStyle={Button} children={children} />
     )
 }
 

@@ -1,19 +1,27 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 import FormContainer from "../FormContainer/FormContainer";
 import useSupabase from "../hooks/useSupabase";
 import { areaOptions, voucherOptions } from "../functions/PriceInfo";
 import { dateOptions } from "../functions/PriceInfo";
+import useContractStore from "../../store/customerStore";
+import LinkButton from "../Buttons/LinkButton";
 
 const PriceMainContent = (props) => {
-    // States will be updated from user form
-    const [customerName, setCustomerName] = useState('');
-    const [type, setType] = useState('');
-    const [days, setDays] = useState('');
-    const [area, setArea] = useState('');
-    const [duration, setDuration] = useState('');
+    // Get state and actions from the store
+    const {
+        customerName,
+        type,
+        days,
+        area,
+        duration,
+        setCustomerName,
+        setType,
+        setDays,
+        setArea,
+        setDuration
+    } = useContractStore();
     
-
     // Show message when data fetching for db is complete
     const [showMsg, setShowMsg] = useState(false);
     // Message state
@@ -50,7 +58,6 @@ const PriceMainContent = (props) => {
     };
 
     const handleCreateMsgButton = async () => {
-        // If the user has not selected anything yet, don't fetch
         if (!type || !days || !customerName || !area) return;
 
         try {
@@ -63,8 +70,17 @@ const PriceMainContent = (props) => {
                 alert('서버에서 가격 정보를 가져오는데 실패했어요. 관리자에게 문의하세요.');
                 return;
             }
-            console.log(voucherResponse, areaResponse);
-                // Build the message if data was successfully fetched
+
+            // Update price data in store
+            useContractStore.getState().setPriceData({
+                fullPrice: voucherResponse.data[0].fullPrice,
+                grant: voucherResponse.data[0].grant,
+                actualPrice: voucherResponse.data[0].actualPrice,
+                accNum: areaResponse.data[0].accNum,
+                bankName: areaResponse.data[0].bankName
+            });
+
+            // Build the message
             const completedMsg = props.preText
                 .replace('{name}', customerName)
                 .replace('{type}', type)
@@ -75,7 +91,8 @@ const PriceMainContent = (props) => {
                 .replace('{actualPrice}', voucherResponse.data[0].actualPrice)
                 .replace('{accNum}', areaResponse.data[0].accNum)
                 .replace('{bankName}', areaResponse.data[0].bankName)
-                .replace('{area}', area)
+                .replace('{area}', area);
+            
             setMsg(completedMsg);
             setShowMsg(true);
         } catch (error) {
@@ -101,6 +118,7 @@ const PriceMainContent = (props) => {
                 placeholder="산모님 이름을 입력하세요"
                 onChange={handleNameChange}
                 onKeyDown={handleEnterPress}
+                value={customerName}
             />
 
             <H4>바우처 유형</H4>
@@ -167,12 +185,21 @@ const PriceMainContent = (props) => {
             >
                 메시지 생성
             </CreateMsgButton>
+            <LinkButton 
+                routeLink="/contract" 
+                TextStyle={H3} 
+                BtnStyle={ContractNavBtn}
+                disabled={!type || !days || !customerName || !area}
+            >
+                계약서 생성
+            </LinkButton>
 
             {showMsg && (
                 <FormContainerWrapper $isGrayedOut={!type || !days || !area}>
                     <FormContainer msg={msg} />
                 </FormContainerWrapper>
             )}
+
         </Container>
     );
 };
@@ -255,6 +282,32 @@ const CreateMsgButton = styled.button`
 
 const H4 = styled.h4`
 
+`
+
+const ContractNavBtn = styled.button`
+    padding: 0.5rem 1rem;
+    margin: 2rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: #0056b3;
+    }
+
+    &:disabled {
+        background-color: #6c757d;
+        cursor: not-allowed;
+    }
+`
+
+const H3 = styled.h3`
+    display: block;
+    font-size: 1rem;
+    font-weight: bold;
 `
 
 export default PriceMainContent;
