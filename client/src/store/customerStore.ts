@@ -10,6 +10,7 @@ interface ContractState {
     duration: string;
     startDate: string;
     endDate: string;
+    contractDuration: string;
 
     fullPrice: string;
     grant: string;
@@ -28,6 +29,7 @@ interface ContractActions {
     setDuration: (duration: string) => void;
     setStartDate: (startDate: string) => void;
     setEndDate: (endDate: string) => void;
+    setContractDuration: (contractDuration: string) => void;
     setPriceData: (data: {
         fullPrice: string;
         grant: string;
@@ -50,6 +52,7 @@ const useContractStore = create<ContractStore>((set) => ({
     duration: '',
     startDate: '',
     endDate: '',
+    contractDuration: '',
     fullPrice: '',
     grant: '',
     actualPrice: '',
@@ -64,6 +67,7 @@ const useContractStore = create<ContractStore>((set) => ({
     setDuration: (duration: string) => set({ duration }),
     setStartDate: (startDate: string) => set({ startDate }),
     setEndDate: (endDate: string) => set({ endDate }),
+    setContractDuration: (contractDuration: string) => set({ contractDuration: contractDuration}),
     
     setPriceData: (data) => set({
         fullPrice: data.fullPrice,

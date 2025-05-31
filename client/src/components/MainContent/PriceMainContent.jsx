@@ -29,7 +29,7 @@ const PriceMainContent = (props) => {
     // useSupabase custom hook
     const { fetchVoucherData, fetchBankData } = useSupabase();
 
-    const weeksCaculator = (day) => {
+    const weeksCalculator = (day) => {
         if (day > 5) return Math.floor(day / 5);
         else return 1;
     }
@@ -85,7 +85,7 @@ const PriceMainContent = (props) => {
                 .replace('{name}', customerName)
                 .replace('{type}', type)
                 .replace('{days}', days)
-                .replace('{weeks}', weeksCaculator(days))
+                .replace('{weeks}', weeksCalculator(days))
                 .replace('{fullPrice}', voucherResponse.data[0].fullPrice)
                 .replace('{grant}', voucherResponse.data[0].grant)
                 .replace('{actualPrice}', voucherResponse.data[0].actualPrice)

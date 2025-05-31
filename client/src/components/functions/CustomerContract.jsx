@@ -9,10 +9,12 @@ const CustomerContract = () => {
       customerContact,
       startDate,
       endDate,
+      contractDuration,
       setCustomerName,
       setCustomerContact,
       setStartDate,
-      setEndDate
+      setEndDate,
+      setContractDuration,
     } = useContractStore();
 
     const [startYear, setStartYear] = useState(new Date().getFullYear());
@@ -101,11 +103,6 @@ const CustomerContract = () => {
   const handleStartDayChange = (e) => {
     setStartDay(e.target.value);
   }
-  useEffect(() => {
-    if (startYear && startMonth && startDay) {
-      setStartDate(`${startYear}-${startMonth}-${startDay}`);
-    }
-  }, [startYear, startMonth, startDay]);
 
   const handleEndYearChange = (e) => {
     setEndYear(e.target.value);
@@ -124,16 +121,21 @@ const CustomerContract = () => {
 
   useEffect(() => {
     if (startYear && startMonth && startDay) {
-      setEndDate(`${startYear}-${startMonth}-${startDay}`);
+      setStartDate(`${startYear}${startMonth}${startDay}`);
     }
   }, [startYear, startMonth, startDay]);
 
   useEffect(() => {
     if (endYear && endMonth && endDay) {
-      setEndDate(`${endYear}-${endMonth}-${endDay}`);
+      setEndDate(`${endYear}${endMonth}${endDay}`);
     }
   }, [endYear, endMonth, endDay]);
 
+  useEffect(() => {
+    if (startDate && endDate) {
+      setContractDuration(`${startDate}~${endDate}`);
+    }
+  }, [startDate, endDate]);
 
 
   const handleCreateContract = () => {
@@ -264,7 +266,7 @@ const CustomerContract = () => {
                 ))}
             </SelectBox>
 
-            <h3>{startDate}</h3>
+            <h3>{contractDuration}</h3>
 
             <CreateMsgButton
                 onClick={handleCreateContract}
