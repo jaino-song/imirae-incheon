@@ -7,6 +7,8 @@ const CustomerContract = () => {
     const {
       customerName,
       customerContact,
+      startDate,
+      endDate,
       setCustomerName,
       setCustomerContact,
       setStartDate,
@@ -17,7 +19,7 @@ const CustomerContract = () => {
     const [startMonth, setStartMonth] = useState('');
     const [startDay, setStartDay] = useState('');
 
-    const [endYear, setEndYear] = useState('');
+    const [endYear, setEndYear] = useState(new Date().getFullYear());
     const [endMonth, setEndMonth] = useState('');
     const [endDay, setEndDay] = useState('');
 
@@ -42,19 +44,40 @@ const CustomerContract = () => {
   }
 
   const months = [
-    { value: "1", label: "1월" },
-    { value: "2", label: "2월" },
-    { value: "3", label: "3월" },
-    { value: "4", label: "4월" },
-    { value: "5", label: "5월" },
-    { value: "6", label: "6월" },
-    { value: "7", label: "7월" },
-    { value: "8", label: "8월" },
-    { value: "9", label: "9월" },
+    { value: "01", label: "1월" },
+    { value: "02", label: "2월" },
+    { value: "03", label: "3월" },
+    { value: "04", label: "4월" },
+    { value: "05", label: "5월" },
+    { value: "06", label: "6월" },
+    { value: "07", label: "7월" },
+    { value: "08", label: "8월" },
+    { value: "09", label: "9월" },
     { value: "10", label: "10월" },
     { value: "11", label: "11월" },
     { value: "12", label: "12월" }
 ];
+
+  const getLastDayOfMonth = (year, month) => {
+    return new Date(year, month, 0).getDate();
+  };
+
+  const generateDays = (month, year) => {
+    if (!month || !year) return [];
+
+    const y = parseInt(year);
+    const m = parseInt(month);
+    const lastDay = getLastDayOfMonth(y, m);
+
+    return Array.from({ length: lastDay }, (_, i) => {
+      const day = i + 1;
+      const paddedDay = day.toString().padStart(2, '0');
+      return {
+        value: paddedDay,
+        label: `${i + 1}일`
+      };
+    });
+  };
  
   const handleNameChange = (e) => {
     setCustomerName(e.target.value);
@@ -66,27 +89,50 @@ const CustomerContract = () => {
 
   const handleStartYearChange = (e) => {
     setStartYear(e.target.value);
+    setStartMonth('');
+    setStartDay('');
   }
 
   const handleStartMonthChange = (e) => {
     setStartMonth(e.target.value);
+    setStartDay('');
   }
 
   const handleStartDayChange = (e) => {
     setStartDay(e.target.value);
   }
+  useEffect(() => {
+    if (startYear && startMonth && startDay) {
+      setStartDate(`${startYear}-${startMonth}-${startDay}`);
+    }
+  }, [startYear, startMonth, startDay]);
 
   const handleEndYearChange = (e) => {
     setEndYear(e.target.value);
+    setEndMonth('');
+    setEndDay('');
   }
 
   const handleEndMonthChange = (e) => {
     setEndMonth(e.target.value);
+    setEndDay('');
   }
 
   const handleEndDayChange = (e) => {
     setEndDay(e.target.value);
   }
+
+  useEffect(() => {
+    if (startYear && startMonth && startDay) {
+      setEndDate(`${startYear}-${startMonth}-${startDay}`);
+    }
+  }, [startYear, startMonth, startDay]);
+
+  useEffect(() => {
+    if (endYear && endMonth && endDay) {
+      setEndDate(`${endYear}-${endMonth}-${endDay}`);
+    }
+  }, [endYear, endMonth, endDay]);
 
 
 
@@ -160,14 +206,66 @@ const CustomerContract = () => {
                   </option>
                 ))}
             </SelectBox>
+            
             <h5>시작 월</h5>
-            <SelectBox value={startMonth} onChange={handleStartMonthChange}>
+            <SelectBox value={startMonth} onChange={handleStartMonthChange} disabled={!startYear}>
+              <option value="" disabled>
+                선택하세요
+              </option>
                 {months.map((month) => (
                   <option key={month.value} value={month.value}>
                     {month.label}
                   </option>
                 ))}
             </SelectBox>
+            
+            <h5>시작 일</h5>
+            <SelectBox value={startDay} onChange={handleStartDayChange} disabled={!startMonth || !startYear}>
+              <option value="" disabled>
+                선택하세요
+              </option>
+                {generateDays(startMonth, startYear).map((day) => (
+                  <option key={day.value} value={day.value}>
+                    {day.label}
+                  </option>
+                ))}
+            </SelectBox>
+
+            <h5>종료 년도</h5>
+            <SelectBox value={endYear} onChange={handleEndYearChange}>
+                {generateYearOptions().map((year) => (
+                  <option key={year} value={year.toString()}>
+                    {year}
+                  </option>
+                ))}
+            </SelectBox>
+
+            <h5>종료 월</h5>
+            <SelectBox value={endMonth} onChange={handleEndMonthChange} disabled={!endYear}>
+              <option value="" disabled>
+                선택하세요
+              </option>
+                {months.map((month) => (
+                  <option key={month.value} value={month.value}>
+                    {month.label}
+                  </option>
+                ))}
+            </SelectBox>
+
+            <h5>종료 일</h5>
+            <SelectBox value={endDay} onChange={handleEndDayChange} disabled={!endMonth || !endYear}>
+              <option value="" disabled>
+                선택하세요
+              </option>
+                {generateDays(endMonth, endYear).map((day) => (
+                  <option key={day.value} value={day.value}>
+                    {day.label}
+                  </option>
+                ))}
+            </SelectBox>
+
+            <h3>{startDate}</h3>
+
             <CreateMsgButton
                 onClick={handleCreateContract}
                 disabled={isLoading}
