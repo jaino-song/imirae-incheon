@@ -4,38 +4,67 @@ import styled from "@emotion/styled";
 import useContractStore from "../../store/customerStore";
 
 const CustomerContract = () => {
-    const {
-      customerName,
-      customerContact,
-      startDate,
-      endDate,
-      contractDuration,
-      setCustomerName,
-      setCustomerContact,
-      setStartDate,
-      setEndDate,
-      setContractDuration,
-    } = useContractStore();
+  const {
+    customerName,
+    customerContact,
+    customerDOB,
+    customerAddress,
 
-    const [startYear, setStartYear] = useState(new Date().getFullYear());
-    const [startMonth, setStartMonth] = useState('');
-    const [startDay, setStartDay] = useState('');
+    caretaker1Name,
+    caretaker1Contact,
 
-    const [endYear, setEndYear] = useState(new Date().getFullYear());
-    const [endMonth, setEndMonth] = useState('');
-    const [endDay, setEndDay] = useState('');
+    startDate,
+    endDate,
+    contractDuration,
 
-    const [isLoading, setIsLoading] = useState(false);
+    paymentYear,
+    paymentMonth,
+    paymentDay,
+    receiptYear,
+    receiptMonth,
+    receiptDay,
 
-    useEffect(() => {
-      loadScripts();
+    setCustomerName,
+    setCustomerContact,
+    setCustomerDOB,
+    setCustomerAddress,
 
-      return () => {
-        const scripts = document.querySelectorAll('script[src*="eformsign.com"]');
-        scripts.forEach(script => script.remove());
-      };
-    }, []); // Empty dependency array means this runs once on mount
+    setCaretaker1Name,
+    setCaretaker1Contact,
 
+    setStartDate,
+    setEndDate,
+    setContractDuration,
+
+    setPaymentYear,
+    setPaymentMonth,
+    setPaymentDay,
+    setReceiptYear,
+    setReceiptMonth,
+    setReceiptDay,
+
+  } = useContractStore();
+
+  const [startYear, setStartYear] = useState(new Date().getFullYear());
+  const [startMonth, setStartMonth] = useState('');
+  const [startDay, setStartDay] = useState('');
+
+  const [endYear, setEndYear] = useState(new Date().getFullYear());
+  const [endMonth, setEndMonth] = useState('');
+  const [endDay, setEndDay] = useState('');
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    loadScripts();
+
+    return () => {
+      const scripts = document.querySelectorAll('script[src*="eformsign.com"]');
+      scripts.forEach(script => script.remove());
+    };
+  }, []); // Empty dependency array means this runs once on mount
+
+  // create years array with the current year and the next year
   const generateYearOptions = () => {
     const currentYear = new Date().getFullYear();
     const years = [];
@@ -58,7 +87,7 @@ const CustomerContract = () => {
     { value: "10", label: "10월" },
     { value: "11", label: "11월" },
     { value: "12", label: "12월" }
-];
+  ];
 
   const getLastDayOfMonth = (year, month) => {
     return new Date(year, month, 0).getDate();
@@ -80,13 +109,29 @@ const CustomerContract = () => {
       };
     });
   };
- 
+
   const handleNameChange = (e) => {
     setCustomerName(e.target.value);
   }
 
   const handleContactChange = (e) => {
     setCustomerContact(e.target.value);
+  }
+
+  const handleCustomerDOBChange = (e) => {
+    setCustomerDOB(e.target.value);
+  }
+
+  const handleCustomerAddressChange = (e) => {
+    setCustomerAddress(e.target.value);
+  }
+
+  const handleCaretaker1NameChange = (e) => {
+    setCaretaker1Name(e.target.value);
+  }
+
+  const handleCaretaker1ContactChange = (e) => {
+    setCaretaker1Contact(e.target.value);
   }
 
   const handleStartYearChange = (e) => {
@@ -117,6 +162,30 @@ const CustomerContract = () => {
 
   const handleEndDayChange = (e) => {
     setEndDay(e.target.value);
+  }
+
+  const handlePaymentYearChange = (e) => {
+    setPaymentYear(e.target.value);
+  }
+
+  const handlePaymentMonthChange = (e) => {
+    setPaymentMonth(e.target.value);
+  }
+
+  const handlePaymentDayChange = (e) => {
+    setPaymentDay(e.target.value);
+  }
+
+  const handleReceiptYearChange = (e) => {
+    setReceiptYear(e.target.value);
+  }
+
+  const handleReceiptMonthChange = (e) => {
+    setReceiptMonth(e.target.value);
+  }
+
+  const handleReceiptDayChange = (e) => {
+    setReceiptDay(e.target.value);
   }
 
   useEffect(() => {
@@ -175,7 +244,7 @@ const CustomerContract = () => {
       );
       eformsign.open();
     }
-    catch(err) {
+    catch (err) {
       console.error('Error initializing eFormSign: ', err);
       alert('계약서 전송 중 오류가 발생했습니다');
       setIsLoading(false);
@@ -184,98 +253,198 @@ const CustomerContract = () => {
 
   return (
     <div>
-        <Container>
-            <H4>산모님 성함</H4>
-            <InputField
-                type="text"
-                placeholder="산모님 이름을 입력하세요"
-                onChange={handleNameChange}
-                value={customerName}
-            />
-            <H4>산모님 휴대전화 번호</H4>
-            <InputField
-                type="text"
-                placeholder="산모님 휴대전화 번호을 입력하세요"
-                onChange={handleContactChange}
-                value={customerContact}
-            />
-            <H4>계약 기간</H4>
-            <h5>시작 년도</h5>
-            <SelectBox value={startYear} onChange={handleStartYearChange}>
-                {generateYearOptions().map((year) => (
-                  <option key={year} value={year.toString()}>
-                    {year}
-                  </option>
-                ))}
-            </SelectBox>
-            
-            <h5>시작 월</h5>
-            <SelectBox value={startMonth} onChange={handleStartMonthChange} disabled={!startYear}>
-              <option value="" disabled>
-                선택하세요
-              </option>
-                {months.map((month) => (
-                  <option key={month.value} value={month.value}>
-                    {month.label}
-                  </option>
-                ))}
-            </SelectBox>
-            
-            <h5>시작 일</h5>
-            <SelectBox value={startDay} onChange={handleStartDayChange} disabled={!startMonth || !startYear}>
-              <option value="" disabled>
-                선택하세요
-              </option>
-                {generateDays(startMonth, startYear).map((day) => (
-                  <option key={day.value} value={day.value}>
-                    {day.label}
-                  </option>
-                ))}
-            </SelectBox>
+      <Container>
+        <H4>산모님 성함</H4>
+        <InputField
+          type="text"
+          placeholder="산모님 이름을 입력하세요"
+          onChange={handleNameChange}
+          value={customerName}
+        />
+        
+        <H4>산모님 휴대전화 번호</H4>
+        <InputField
+          type="text"
+          placeholder="산모님 휴대전화 번호을 입력하세요"
+          onChange={handleContactChange}
+          value={customerContact}
+        />
 
-            <h5>종료 년도</h5>
-            <SelectBox value={endYear} onChange={handleEndYearChange}>
-                {generateYearOptions().map((year) => (
-                  <option key={year} value={year.toString()}>
-                    {year}
-                  </option>
-                ))}
-            </SelectBox>
+        <H4>산모님 생년월일</H4>
+        <InputField
+          type="text"
+          placeholder="생년월일 6자리 (YYMMDD)"
+          onChange={handleCustomerDOBChange}
+          value={customerDOB}
+        />
 
-            <h5>종료 월</h5>
-            <SelectBox value={endMonth} onChange={handleEndMonthChange} disabled={!endYear}>
-              <option value="" disabled>
-                선택하세요
-              </option>
-                {months.map((month) => (
-                  <option key={month.value} value={month.value}>
-                    {month.label}
-                  </option>
-                ))}
-            </SelectBox>
+        <H4>산모님 주소</H4>
+        <InputField
+          type="text"
+          placeholder="산모님 주소를 입력하세요"
+          onChange={handleCustomerAddressChange}
+          value={customerAddress}
+        />
 
-            <h5>종료 일</h5>
-            <SelectBox value={endDay} onChange={handleEndDayChange} disabled={!endMonth || !endYear}>
-              <option value="" disabled>
-                선택하세요
-              </option>
-                {generateDays(endMonth, endYear).map((day) => (
-                  <option key={day.value} value={day.value}>
-                    {day.label}
-                  </option>
-                ))}
-            </SelectBox>
+        <H4>계약 기간</H4>
+        <h5>시작 년도</h5>
+        <SelectBox value={startYear} onChange={handleStartYearChange}>
+          {generateYearOptions().map((year) => (
+            <option key={year} value={year.toString()}>
+              {year}
+            </option>
+          ))}
+        </SelectBox>
 
-            <h3>{contractDuration}</h3>
+        <h5>시작 월</h5>
+        <SelectBox value={startMonth} onChange={handleStartMonthChange} disabled={!startYear}>
+          <option value="" disabled>
+            선택하세요
+          </option>
+          {months.map((month) => (
+            <option key={month.value} value={month.value}>
+              {month.label}
+            </option>
+          ))}
+        </SelectBox>
 
-            <CreateMsgButton
-                onClick={handleCreateContract}
-                disabled={isLoading}
-            >
-                {isLoading ? '전송 중...' : '계약서 전송'}
-            </CreateMsgButton>
-            <iframe id="eformsign_iframe" style={{ display: 'none' }} />
-        </Container>
+        <h5>시작 일</h5>
+        <SelectBox value={startDay} onChange={handleStartDayChange} disabled={!startMonth || !startYear}>
+          <option value="" disabled>
+            선택하세요
+          </option>
+          {generateDays(startMonth, startYear).map((day) => (
+            <option key={day.value} value={day.value}>
+              {day.label}
+            </option>
+          ))}
+        </SelectBox>
+
+        <h5>종료 년도</h5>
+        <SelectBox value={endYear} onChange={handleEndYearChange}>
+          {generateYearOptions().map((year) => (
+            <option key={year} value={year.toString()}>
+              {year}
+            </option>
+          ))}
+        </SelectBox>
+
+        <h5>종료 월</h5>
+        <SelectBox value={endMonth} onChange={handleEndMonthChange} disabled={!endYear}>
+          <option value="" disabled>
+            선택하세요
+          </option>
+          {months.map((month) => (
+            <option key={month.value} value={month.value}>
+              {month.label}
+            </option>
+          ))}
+        </SelectBox>
+
+        <h5>종료 일</h5>
+        <SelectBox value={endDay} onChange={handleEndDayChange} disabled={!endMonth || !endYear}>
+          <option value="" disabled>
+            선택하세요
+          </option>
+          {generateDays(endMonth, endYear).map((day) => (
+            <option key={day.value} value={day.value}>
+              {day.label}
+            </option>
+          ))}
+        </SelectBox>
+
+        <h5>제공인력 1 성명</h5>
+        <InputField
+          type="text"
+          placeholder="제공인력1의 이름을 입력하세요"
+          onChange={handleCaretaker1NameChange}
+          value={caretaker1Name}
+        />
+
+        <h5>제공인력 1 연락처</h5>
+        <InputField
+          type="text"
+          placeholder="제공인력1의 연락처를 입력하세요"
+          onChange={handleCaretaker1ContactChange}
+          value={caretaker1Contact}
+        />
+
+        <h5>본인부담금 수령 년도</h5>
+        <SelectBox value={startYear} onChange={handlePaymentYearChange}>
+          {generateYearOptions().map((year) => (
+            <option key={year} value={year.toString()}>
+              {year}
+            </option>
+          ))}
+        </SelectBox>
+
+        <h5>본인부담금 수령 월</h5>
+        <SelectBox value={startMonth} onChange={handlePaymentMonthChange} disabled={!paymentYear}>
+          <option value="" disabled>
+            선택하세요
+          </option>
+          {months.map((month) => (
+            <option key={month.value} value={month.value}>
+              {month.label}
+            </option>
+          ))}
+        </SelectBox>
+
+        <h5>본인부담금 수령 일</h5>
+        <SelectBox value={startDay} onChange={handlePaymentDayChange} disabled={!paymentYear || !paymentMonth}>
+          <option value="" disabled>
+            선택하세요
+          </option>
+          {generateDays(startMonth, startYear).map((day) => (
+            <option key={day.value} value={day.value}>
+              {day.label}
+            </option>
+          ))}
+        </SelectBox>
+
+        <h5>영수증 발급 년도</h5>
+        <SelectBox value={startYear} onChange={handleReceiptYearChange}>
+          {generateYearOptions().map((year) => (
+            <option key={year} value={year.toString()}>
+              {year}
+            </option>
+          ))}
+        </SelectBox>
+
+        <h5>영수증 발급 월</h5>
+        <SelectBox value={startMonth} onChange={handleReceiptMonthChange} disabled={!receiptYear}>
+          <option value="" disabled>
+            선택하세요
+          </option>
+          {months.map((month) => (
+            <option key={month.value} value={month.value}>
+              {month.label}
+            </option>
+          ))}
+        </SelectBox>
+
+        <h5>영수증 발급 일</h5>
+        <SelectBox value={startDay} onChange={handleReceiptDayChange} disabled={!receiptMonth || !receiptDay}>
+          <option value="" disabled>
+            선택하세요
+          </option>
+          {generateDays(startMonth, startYear).map((day) => (
+            <option key={day.value} value={day.value}>
+              {day.label}
+            </option>
+          ))}
+        </SelectBox>
+
+        <h3>{contractDuration}</h3>
+
+        <CreateMsgButton
+          onClick={handleCreateContract}
+          disabled={isLoading}
+        >
+          {isLoading ? '전송 중...' : '계약서 전송'}
+        </CreateMsgButton>
+        <iframe id="eformsign_iframe" style={{ display: 'none' }} />
+      </Container>
 
     </div>
   );

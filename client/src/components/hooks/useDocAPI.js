@@ -1,3 +1,4 @@
+import { act } from 'react';
 import useContractStore from '../../store/customerStore';
 
 // Function to load external scripts
@@ -26,18 +27,31 @@ export const loadScript = (src) => {
     const {
         customerName,
         customerContact,
+        customerDOB,
+        customerAddress,
+
+        caretaker1Name,
+        caretaker1Contact,
+
         type,
         days,
         area,
+        duration,
+
+        startYear,
+        startMonth,
+        startDay,
+        startDate,
+        
+        endYear,
+        endMonth,
+        endDay,
+        endDate,
+
         fullPrice,
         grant,
         actualPrice
     } = useContractStore.getState();
-
-    // Calculate contract dates
-    const startDate = new Date();
-    const endDate = new Date();
-    endDate.setDate(endDate.getDate() + parseInt(days));
 
     return {
         "company": {
@@ -60,28 +74,36 @@ export const loadScript = (src) => {
                     "value": customerName
                 },
                 {
+                    "id": "이용자 생년월일",
+                    "value": customerDOB
+                },
+                {
+                    "id": "이용자 주소",
+                    "value": customerAddress
+                },
+                {
                     "id": "계약 시작 년도",
-                    "value": startDate.getFullYear().toString()
+                    "value": startYear
                 },
                 {
                     "id": "계약 시작 월",
-                    "value": (startDate.getMonth() + 1).toString()
+                    "value": startMonth
                 },
                 {
                     "id": "계약 시작 일",
-                    "value": startDate.getDate().toString()
+                    "value": startDay
                 },
                 {
                     "id": "계약 종료 년도",
-                    "value": endDate.getFullYear().toString()
+                    "value": endYear
                 },
                 {
                     "id": "계약 종료 월",
-                    "value": (endDate.getMonth() + 1).toString()
+                    "value": endMonth
                 },
                 {
                     "id": "계약 종료 일",
-                    "value": endDate.getDate().toString()
+                    "value": endDay
                 },
                 {
                     "id": "서비스 비용",
@@ -101,23 +123,23 @@ export const loadScript = (src) => {
                 },
                 {
                     "id": "제공인력 1 성명",
-                    "value": "담당자 이름"
+                    "value": caretaker1Name
                 },
                 {
                     "id": "제공인력 1 연락처",
-                    "value": "담당자 연락처"
+                    "value": caretaker1Contact
                 },
                 {
-                    "id": "제공인력2 성명",
-                    "value": "담당자2 이름"
+                    "id": "서비스 가격",
+                    "value": fullPrice
                 },
                 {
-                    "id": "제공인력2 연락처",
-                    "value": "담당자2 연락처"
+                    "id": "정부지원금",
+                    "value": grant
                 },
                 {
-                    "id": "제공인력2 변경일",
-                    "value": new Date().toISOString().split('T')[0]
+                    "id": "본인부담금",
+                    "value": actualPrice
                 },
                 {
                     "id": "본인부담금 수령 년도",
