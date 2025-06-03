@@ -23,7 +23,7 @@ export const loadScript = (src) => {
     }
   };
 
-  export const getDocumentOptions = () => {
+  export const getDocumentOptions = (accessToken = '', refreshToken = '') => {
     const {
         customerName,
         customerContact,
@@ -36,24 +36,33 @@ export const loadScript = (src) => {
         type,
         days,
         area,
-        duration,
+        
+        contractDuration,
 
         startYear,
         startMonth,
         startDay,
         startDate,
-        
+
         endYear,
         endMonth,
         endDay,
         endDate,
+
+        paymentYear,
+        paymentMonth,
+        paymentDay,
+
+        receiptYear,
+        receiptMonth,
+        receiptDay,
 
         fullPrice,
         grant,
         actualPrice
     } = useContractStore.getState();
 
-    return {
+    const documentOptions = {
         "company": {
             "id": "6635b9dacdbc4837ba378c6336ef1e34",
             "country_code": "kr",
@@ -61,13 +70,16 @@ export const loadScript = (src) => {
         },
         "user": {
             "type": "01",
-            "id": "forchildrenbysongs@gmail.com"
+            "id": "forchildrenbysongs@gmail.com",
+            "access_token": accessToken,
+            "refresh_token": refreshToken,
         },
         "mode": {
             "type": "01",
             "template_id": "d1591da29590495d800f55f1d1fc1378"
         },
         "prefill": {
+            "document_name": "산모신생아건강관리서비스 계약서",
             "fields": [
                 {
                     "id": "이용자 성명",
@@ -143,29 +155,46 @@ export const loadScript = (src) => {
                 },
                 {
                     "id": "본인부담금 수령 년도",
-                    "value": new Date().getFullYear().toString()
+                    "value": paymentYear
                 },
                 {
                     "id": "본인부담금 수령 월",
-                    "value": (new Date().getMonth() + 1).toString()
+                    "value": paymentMonth
                 },
                 {
                     "id": "본인부담금 수령 일",
-                    "value": new Date().getDate().toString()
+                    "value": paymentDay
                 },
                 {
                     "id": "영수증 년도",
-                    "value": new Date().getFullYear().toString()
+                    "value": receiptYear
                 },
                 {
                     "id": "영수증 월",
-                    "value": (new Date().getMonth() + 1).toString()
+                    "value": receiptMonth
                 },
                 {
                     "id": "영수증 일",
-                    "value": new Date().getDate().toString()
+                    "value": receiptDay
+                },
+                {
+                    "id": "서비스 기간",
+                    "value": contractDuration
                 }
+            ],
+            "recipients": [
+                {
+                    "step_idx": "2",
+                    "step_type": "05",
+                    "name": customerName,
+                    "id": '',
+                    "sms": customerContact,
+                    "use_sms": true,
+                },
             ]
-        }
+        },
+        "return_fields": [customerName],
     };
+
+    return documentOptions;
   };

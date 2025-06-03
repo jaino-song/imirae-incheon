@@ -102,21 +102,21 @@ const useContractStore = create<ContractStore>((set) => ({
     area: '',
     duration: '',
 
-    startYear: '',
+    startYear: new Date().getFullYear().toString(),
     startMonth: '',
     startDay: '',
     startDate: '',
 
-    endYear: '',
+    endYear: new Date().getFullYear().toString(),
     endMonth: '',
     endDay: '',
     endDate: '',
 
     contractDuration: '',
-    paymentYear: '',
+    paymentYear: new Date().getFullYear().toString(),
     paymentMonth: '',
     paymentDay: '',
-    receiptYear: '',
+    receiptYear: new Date().getFullYear().toString(),
     receiptMonth: '',
     receiptDay: '',
 
@@ -134,7 +134,7 @@ const useContractStore = create<ContractStore>((set) => ({
     setCustomerAddress: (address: string) => set({ customerAddress: address }),
 
     setCaretaker1Name: (name: string) => set({ caretaker1Name: name }),
-    setCaretaker1Contact: (contact: string) => set({ caretaker1Name: contact }),
+    setCaretaker1Contact: (contact: string) => set({ caretaker1Contact: contact }),
     
     setType: (type: string) => set({ type }),
     setDays: (days: string) => set({ days }),

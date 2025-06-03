@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { loadScripts, getDocumentOptions } from "../hooks/useDocAPI";
+import useEformsignAuth from "../hooks/useEformsignAuth";
 import styled from "@emotion/styled";
 import useContractStore from "../../store/customerStore";
 
@@ -13,7 +14,14 @@ const CustomerContract = () => {
     caretaker1Name,
     caretaker1Contact,
 
+    startYear,
+    startMonth,
+    startDay,
     startDate,
+
+    endYear,
+    endMonth,
+    endDay,
     endDate,
     contractDuration,
 
@@ -32,7 +40,14 @@ const CustomerContract = () => {
     setCaretaker1Name,
     setCaretaker1Contact,
 
+    setStartYear,
+    setStartMonth,
+    setStartDay,
     setStartDate,
+
+    setEndYear,
+    setEndMonth,
+    setEndDay,
     setEndDate,
     setContractDuration,
 
@@ -45,13 +60,15 @@ const CustomerContract = () => {
 
   } = useContractStore();
 
-  const [startYear, setStartYear] = useState(new Date().getFullYear());
-  const [startMonth, setStartMonth] = useState('');
-  const [startDay, setStartDay] = useState('');
-
-  const [endYear, setEndYear] = useState(new Date().getFullYear());
-  const [endMonth, setEndMonth] = useState('');
-  const [endDay, setEndDay] = useState('');
+  // eformsign 인증 훅 사용
+  const {
+    accessToken,
+    refreshToken,
+    isAuthenticated,
+    isLoading: authLoading,
+    getAccessToken,
+    refreshAccessToken
+  } = useEformsignAuth();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -62,7 +79,16 @@ const CustomerContract = () => {
       const scripts = document.querySelectorAll('script[src*="eformsign.com"]');
       scripts.forEach(script => script.remove());
     };
-  }, []); // Empty dependency array means this runs once on mount
+  }, []);
+
+  // 컴포넌트 마운트 시 토큰이 없으면 발급 시도
+  useEffect(() => {
+    if (!isAuthenticated && !authLoading) {
+      getAccessToken().catch(error => {
+        console.error('초기 토큰 발급 실패:', error);
+      });
+    }
+  }, [isAuthenticated, authLoading, getAccessToken]);
 
   // create years array with the current year and the next year
   const generateYearOptions = () => {
@@ -207,17 +233,27 @@ const CustomerContract = () => {
   }, [startDate, endDate]);
 
 
-  const handleCreateContract = () => {
+  const handleCreateContract = async () => {
     if (!customerName || !customerContact) {
       alert('산모님 성함과 휴대전화 번호를 모두 입력해주세요');
       return;
+    }
+
+    // 토큰이 없으면 발급 시도
+    if (!isAuthenticated) {
+      try {
+        await getAccessToken();
+      } catch (error) {
+        alert('인증에 실패했습니다. 관리자에게 문의하세요.');
+        return;
+      }
     }
 
     setIsLoading(true);
 
     try {
       const eformsign = new window.EformSignDocument();
-      const documentOptions = getDocumentOptions(); // Get fresh options with current store values
+      const documentOptions = getDocumentOptions(accessToken, refreshToken);
 
       const success_callback = (res) => {
         console.log('Document Creation Successful', res);
@@ -225,8 +261,29 @@ const CustomerContract = () => {
         setIsLoading(false);
       };
 
-      const error_callback = (res) => {
+      const error_callback = async (res) => {
         console.error("Error creating document", res);
+        
+        // 토큰 만료 오류인 경우 토큰 갱신 시도
+        if (res.code === 401 || res.code === 403) {
+          try {
+            await refreshAccessToken();
+            // 토큰 갱신 후 재시도
+            const newDocumentOptions = getDocumentOptions(accessToken, refreshToken);
+            eformsign.document(
+              newDocumentOptions,
+              "eformsign_iframe",
+              success_callback,
+              error_callback,
+              action_callback
+            );
+            eformsign.open();
+            return;
+          } catch (refreshError) {
+            console.error('토큰 갱신 실패:', refreshError);
+          }
+        }
+        
         alert('계약서 전송 중 오류가 발생했습니다');
         setIsLoading(false);
       };
@@ -235,6 +292,7 @@ const CustomerContract = () => {
         console.log('Action callback: ', res);
       };
 
+      // First set up the document
       eformsign.document(
         documentOptions,
         "eformsign_iframe",
@@ -242,9 +300,10 @@ const CustomerContract = () => {
         error_callback,
         action_callback
       );
+
+      // Then open it
       eformsign.open();
-    }
-    catch (err) {
+    } catch (err) {
       console.error('Error initializing eFormSign: ', err);
       alert('계약서 전송 중 오류가 발생했습니다');
       setIsLoading(false);
@@ -261,7 +320,7 @@ const CustomerContract = () => {
           onChange={handleNameChange}
           value={customerName}
         />
-        
+
         <H4>산모님 휴대전화 번호</H4>
         <InputField
           type="text"
@@ -370,7 +429,7 @@ const CustomerContract = () => {
         />
 
         <h5>본인부담금 수령 년도</h5>
-        <SelectBox value={startYear} onChange={handlePaymentYearChange}>
+        <SelectBox value={paymentYear} onChange={handlePaymentYearChange}>
           {generateYearOptions().map((year) => (
             <option key={year} value={year.toString()}>
               {year}
@@ -379,7 +438,7 @@ const CustomerContract = () => {
         </SelectBox>
 
         <h5>본인부담금 수령 월</h5>
-        <SelectBox value={startMonth} onChange={handlePaymentMonthChange} disabled={!paymentYear}>
+        <SelectBox value={paymentMonth} onChange={handlePaymentMonthChange} disabled={!paymentYear}>
           <option value="" disabled>
             선택하세요
           </option>
@@ -391,11 +450,11 @@ const CustomerContract = () => {
         </SelectBox>
 
         <h5>본인부담금 수령 일</h5>
-        <SelectBox value={startDay} onChange={handlePaymentDayChange} disabled={!paymentYear || !paymentMonth}>
+        <SelectBox value={paymentDay} onChange={handlePaymentDayChange} disabled={!paymentYear || !paymentMonth}>
           <option value="" disabled>
             선택하세요
           </option>
-          {generateDays(startMonth, startYear).map((day) => (
+          {generateDays(paymentMonth, paymentYear).map((day) => (
             <option key={day.value} value={day.value}>
               {day.label}
             </option>
@@ -403,7 +462,7 @@ const CustomerContract = () => {
         </SelectBox>
 
         <h5>영수증 발급 년도</h5>
-        <SelectBox value={startYear} onChange={handleReceiptYearChange}>
+        <SelectBox value={receiptYear} onChange={handleReceiptYearChange}>
           {generateYearOptions().map((year) => (
             <option key={year} value={year.toString()}>
               {year}
@@ -412,7 +471,7 @@ const CustomerContract = () => {
         </SelectBox>
 
         <h5>영수증 발급 월</h5>
-        <SelectBox value={startMonth} onChange={handleReceiptMonthChange} disabled={!receiptYear}>
+        <SelectBox value={receiptMonth} onChange={handleReceiptMonthChange} disabled={!receiptYear}>
           <option value="" disabled>
             선택하세요
           </option>
@@ -424,11 +483,11 @@ const CustomerContract = () => {
         </SelectBox>
 
         <h5>영수증 발급 일</h5>
-        <SelectBox value={startDay} onChange={handleReceiptDayChange} disabled={!receiptMonth || !receiptDay}>
+        <SelectBox value={receiptDay} onChange={handleReceiptDayChange} disabled={!receiptMonth || !receiptYear}>
           <option value="" disabled>
             선택하세요
           </option>
-          {generateDays(startMonth, startYear).map((day) => (
+          {generateDays(receiptMonth, receiptYear).map((day) => (
             <option key={day.value} value={day.value}>
               {day.label}
             </option>
@@ -443,7 +502,7 @@ const CustomerContract = () => {
         >
           {isLoading ? '전송 중...' : '계약서 전송'}
         </CreateMsgButton>
-        <iframe id="eformsign_iframe" style={{ display: 'none' }} />
+        <iframe id="eformsign_iframe" width="1440" height="1024" />
       </Container>
 
     </div>
