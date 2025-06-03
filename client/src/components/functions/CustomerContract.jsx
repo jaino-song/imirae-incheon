@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { loadScripts, getDocumentOptions } from "../hooks/useDocAPI";
 import useEformsignAuth from "../hooks/useEformsignAuth";
 import styled from "@emotion/styled";
@@ -81,14 +81,13 @@ const CustomerContract = () => {
     };
   }, []);
 
-  // 컴포넌트 마운트 시 토큰이 없으면 발급 시도
   useEffect(() => {
-    if (!isAuthenticated && !authLoading) {
+    if (!isAuthenticated && !authLoading && !isLoading) {
       getAccessToken().catch(error => {
         console.error('초기 토큰 발급 실패:', error);
       });
     }
-  }, [isAuthenticated, authLoading, getAccessToken]);
+  }, [isAuthenticated, authLoading, getAccessToken, isLoading]);
 
   // create years array with the current year and the next year
   const generateYearOptions = () => {
@@ -214,6 +213,10 @@ const CustomerContract = () => {
     setReceiptDay(e.target.value);
   }
 
+  const handleModalClick = () => {
+    setIsLoading(false);
+  }
+
   useEffect(() => {
     if (startYear && startMonth && startDay) {
       setStartDate(`${startYear}${startMonth}${startDay}`);
@@ -232,81 +235,112 @@ const CustomerContract = () => {
     }
   }, [startDate, endDate]);
 
+  // Memoize callbacks to prevent re-creation on every render unless dependencies change
+  const success_callback = useCallback((res) => {
+    console.log('[eformsign_useEffect] success_callback triggered.', res);
+    alert('계약서가 성공적으로 전송되었습니다');
+    setIsLoading(false);
+  }, [setIsLoading]);
+
+  const error_callback = useCallback(async (res, eformsignInstance) => {
+    console.error("[eformsign_useEffect] error_callback triggered.", res);
+    if (res.code === 401 || res.code === 403) {
+      try {
+        console.log('[eformsign_useEffect] Token expired/invalid, attempting refresh...');
+        await refreshAccessToken();
+        console.log('[eformsign_useEffect] Token refresh successful, retrying document...');
+        
+        const newAccessToken = localStorage.getItem('eformsign_access_token') || accessToken;
+        const newRefreshToken = localStorage.getItem('eformsign_refresh_token') || refreshToken;
+
+        const newDocumentOptions = getDocumentOptions(newAccessToken, newRefreshToken);
+        console.log('[eformsign_useEffect] New Document Options after refresh:', JSON.stringify(newDocumentOptions, null, 2));
+        
+        if (eformsignInstance) {
+            eformsignInstance.document(
+              newDocumentOptions,
+              "eformsign_iframe",
+              success_callback,
+              (retryRes) => error_callback(retryRes, eformsignInstance),
+              action_callback
+            );
+            eformsignInstance.open();
+        } else {
+            console.error('[eformsign_useEffect] eformsignInstance not available for retry.');
+            alert('토큰 갱신 후 문서 재시도에 실패했습니다. eformsign 객체를 확인해주세요.');
+            setIsLoading(false);
+        }
+        return;
+      } catch (refreshError) {
+        console.error('[eformsign_useEffect] Token refresh failed:', refreshError);
+      }
+    }
+    alert('계약서 전송 중 오류가 발생했습니다: ' + (res.message || JSON.stringify(res)));
+    setIsLoading(false);
+  }, [refreshAccessToken, success_callback, accessToken, refreshToken, setIsLoading]);
+
+  const action_callback = useCallback((res) => {
+    console.log('[eformsign_useEffect] action_callback triggered: ', res);
+  }, []);
+
+  useEffect(() => {
+    if (isLoading && isAuthenticated) {
+      console.log('[eformsign_useEffect] isLoading is true and authenticated. Initializing eformsign.');
+      
+      console.log('[eformsign_useEffect] Is EformSignDocument available on window?', typeof window.EformSignDocument);
+      if (typeof window.EformSignDocument === 'undefined') {
+          alert('eformsign SDK (EformSignDocument) is not loaded. Please check console for script loading errors.');
+          setIsLoading(false);
+          return;
+      }
+
+      const eformsignInstance = new window.EformSignDocument();
+      console.log('[eformsign_useEffect] EformSignDocument instantiated.');
+
+      const documentOptions = getDocumentOptions(accessToken, refreshToken);
+      console.log('[eformsign_useEffect] Document Options for eformsign:', JSON.stringify(documentOptions, null, 2)); 
+      
+      try {
+        console.log('[eformsign_useEffect] Calling eformsign.document()...');
+        eformsignInstance.document(
+          documentOptions,
+          "eformsign_iframe",
+          success_callback,
+          (res) => error_callback(res, eformsignInstance),
+          action_callback
+        );
+        console.log('[eformsign_useEffect] Finished eformsign.document(). Calling eformsign.open()...');
+        eformsignInstance.open();
+        console.log('[eformsign_useEffect] Finished eformsign.open(). eformsign UI should load in iframe.');
+      } catch (sdkError) {
+        console.error('[eformsign_useEffect] Error during eformsign SDK calls (document/open): ', sdkError);
+        alert('eformsign SDK 초기화 중 오류 발생: ' + sdkError.message);
+        setIsLoading(false);
+      }
+    }
+  }, [isLoading, isAuthenticated, accessToken, refreshToken, getDocumentOptions, success_callback, error_callback, action_callback, setIsLoading]);
 
   const handleCreateContract = async () => {
+    console.log('[handleCreateContract] Clicked.');
     if (!customerName || !customerContact) {
       alert('산모님 성함과 휴대전화 번호를 모두 입력해주세요');
       return;
     }
 
-    // 토큰이 없으면 발급 시도
+    console.log('[handleCreateContract] Checking authentication...');
     if (!isAuthenticated) {
       try {
+        console.log('[handleCreateContract] Not authenticated, attempting to get access token...');
         await getAccessToken();
+        console.log('[handleCreateContract] Access token obtained. Now setting isLoading to true.');
+        setIsLoading(true);
       } catch (error) {
         alert('인증에 실패했습니다. 관리자에게 문의하세요.');
         return;
       }
-    }
-
-    setIsLoading(true);
-
-    try {
-      const eformsign = new window.EformSignDocument();
-      const documentOptions = getDocumentOptions(accessToken, refreshToken);
-
-      const success_callback = (res) => {
-        console.log('Document Creation Successful', res);
-        alert('계약서가 성공적으로 전송되었습니다');
-        setIsLoading(false);
-      };
-
-      const error_callback = async (res) => {
-        console.error("Error creating document", res);
-        
-        // 토큰 만료 오류인 경우 토큰 갱신 시도
-        if (res.code === 401 || res.code === 403) {
-          try {
-            await refreshAccessToken();
-            // 토큰 갱신 후 재시도
-            const newDocumentOptions = getDocumentOptions(accessToken, refreshToken);
-            eformsign.document(
-              newDocumentOptions,
-              "eformsign_iframe",
-              success_callback,
-              error_callback,
-              action_callback
-            );
-            eformsign.open();
-            return;
-          } catch (refreshError) {
-            console.error('토큰 갱신 실패:', refreshError);
-          }
-        }
-        
-        alert('계약서 전송 중 오류가 발생했습니다');
-        setIsLoading(false);
-      };
-
-      const action_callback = (res) => {
-        console.log('Action callback: ', res);
-      };
-
-      // First set up the document
-      eformsign.document(
-        documentOptions,
-        "eformsign_iframe",
-        success_callback,
-        error_callback,
-        action_callback
-      );
-
-      // Then open it
-      eformsign.open();
-    } catch (err) {
-      console.error('Error initializing eFormSign: ', err);
-      alert('계약서 전송 중 오류가 발생했습니다');
-      setIsLoading(false);
+    } else {
+        setIsLoading(true);
+        console.log('[handleCreateContract] Already authenticated. setIsLoading(true) - Modal should be visible.');
     }
   }
 
@@ -498,13 +532,24 @@ const CustomerContract = () => {
 
         <CreateMsgButton
           onClick={handleCreateContract}
-          disabled={isLoading}
+          disabled={isLoading || authLoading}
         >
-          {isLoading ? '전송 중...' : '계약서 전송'}
+          {isLoading ? '계약서 처리 중...' : (authLoading ? '인증 중...' : '계약서 전송')}
         </CreateMsgButton>
-        <iframe id="eformsign_iframe" width="1440" height="1024" />
+          
+        {isLoading && (
+          <ModalBackdrop onClick={handleModalClick}>
+            <ModalContent>
+              <iframe 
+                id="eformsign_iframe" 
+                width="1440"
+                height="1024"
+                style={{ border: 'none' }}
+              />
+            </ModalContent>
+          </ModalBackdrop>
+        )}
       </Container>
-
     </div>
   );
 };
@@ -561,5 +606,32 @@ const SelectBox = styled.select`
         border-color: #007bff;
     }
 `
+
+// New Styled Components for Modal
+const ModalBackdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); // Semi-transparent black
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; // Ensure it's on top
+`;
+
+const ModalContent = styled.div`
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 90%; // Or a fixed width like 1200px
+  height: 90%; // Or a fixed height like 800px
+  max-width: 1440px; // Corresponds to original iframe width
+  max-height: 1024px; // Corresponds to original iframe height
+  display: flex; // To help center iframe if it's smaller
+  flex-direction: column; // Stack elements if you add a close button later
+`;
 
 export default CustomerContract;
