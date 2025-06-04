@@ -4,6 +4,7 @@ import useEformsignAuth from "../hooks/useEformsignAuth";
 import styled from "@emotion/styled";
 import useContractStore from "../../store/customerStore";
 
+// Using global states inside a zustand store
 const CustomerContract = () => {
   const {
     customerName,
@@ -60,7 +61,7 @@ const CustomerContract = () => {
 
   } = useContractStore();
 
-  // eformsign 인증 훅 사용
+  // eformsign auth hook
   const {
     accessToken,
     refreshToken,
@@ -134,88 +135,6 @@ const CustomerContract = () => {
       };
     });
   };
-
-  const handleNameChange = (e) => {
-    setCustomerName(e.target.value);
-  }
-
-  const handleContactChange = (e) => {
-    setCustomerContact(e.target.value);
-  }
-
-  const handleCustomerDOBChange = (e) => {
-    setCustomerDOB(e.target.value);
-  }
-
-  const handleCustomerAddressChange = (e) => {
-    setCustomerAddress(e.target.value);
-  }
-
-  const handleCaretaker1NameChange = (e) => {
-    setCaretaker1Name(e.target.value);
-  }
-
-  const handleCaretaker1ContactChange = (e) => {
-    setCaretaker1Contact(e.target.value);
-  }
-
-  const handleStartYearChange = (e) => {
-    setStartYear(e.target.value);
-    setStartMonth('');
-    setStartDay('');
-  }
-
-  const handleStartMonthChange = (e) => {
-    setStartMonth(e.target.value);
-    setStartDay('');
-  }
-
-  const handleStartDayChange = (e) => {
-    setStartDay(e.target.value);
-  }
-
-  const handleEndYearChange = (e) => {
-    setEndYear(e.target.value);
-    setEndMonth('');
-    setEndDay('');
-  }
-
-  const handleEndMonthChange = (e) => {
-    setEndMonth(e.target.value);
-    setEndDay('');
-  }
-
-  const handleEndDayChange = (e) => {
-    setEndDay(e.target.value);
-  }
-
-  const handlePaymentYearChange = (e) => {
-    setPaymentYear(e.target.value);
-  }
-
-  const handlePaymentMonthChange = (e) => {
-    setPaymentMonth(e.target.value);
-  }
-
-  const handlePaymentDayChange = (e) => {
-    setPaymentDay(e.target.value);
-  }
-
-  const handleReceiptYearChange = (e) => {
-    setReceiptYear(e.target.value);
-  }
-
-  const handleReceiptMonthChange = (e) => {
-    setReceiptMonth(e.target.value);
-  }
-
-  const handleReceiptDayChange = (e) => {
-    setReceiptDay(e.target.value);
-  }
-
-  const handleModalClick = () => {
-    setIsLoading(false);
-  }
 
   useEffect(() => {
     if (startYear && startMonth && startDay) {
@@ -351,7 +270,7 @@ const CustomerContract = () => {
         <InputField
           type="text"
           placeholder="산모님 이름을 입력하세요"
-          onChange={handleNameChange}
+          onChange={(e) => setCustomerName(e.target.value)}
           value={customerName}
         />
 
@@ -359,7 +278,7 @@ const CustomerContract = () => {
         <InputField
           type="text"
           placeholder="산모님 휴대전화 번호을 입력하세요"
-          onChange={handleContactChange}
+          onChange={(e) => setCustomerContact(e.target.value)}
           value={customerContact}
         />
 
@@ -367,7 +286,7 @@ const CustomerContract = () => {
         <InputField
           type="text"
           placeholder="생년월일 6자리 (YYMMDD)"
-          onChange={handleCustomerDOBChange}
+          onChange={(e) => setCustomerDOB(e.target.value)}
           value={customerDOB}
         />
 
@@ -375,13 +294,13 @@ const CustomerContract = () => {
         <InputField
           type="text"
           placeholder="산모님 주소를 입력하세요"
-          onChange={handleCustomerAddressChange}
+          onChange={(e) => setCustomerAddress(e.target.value)}
           value={customerAddress}
         />
 
         <H4>계약 기간</H4>
         <h5>시작 년도</h5>
-        <SelectBox value={startYear} onChange={handleStartYearChange}>
+        <SelectBox value={startYear} onChange={(e) => setStartYear(e.target.value)}>
           {generateYearOptions().map((year) => (
             <option key={year} value={year.toString()}>
               {year}
@@ -390,7 +309,7 @@ const CustomerContract = () => {
         </SelectBox>
 
         <h5>시작 월</h5>
-        <SelectBox value={startMonth} onChange={handleStartMonthChange} disabled={!startYear}>
+        <SelectBox value={startMonth} onChange={(e) => setStartMonth(e.target.value)} disabled={!startYear}>
           <option value="" disabled>
             선택하세요
           </option>
@@ -402,7 +321,7 @@ const CustomerContract = () => {
         </SelectBox>
 
         <h5>시작 일</h5>
-        <SelectBox value={startDay} onChange={handleStartDayChange} disabled={!startMonth || !startYear}>
+        <SelectBox value={startDay} onChange={(e) => setStartDay(e.target.value)} disabled={!startMonth || !startYear}>
           <option value="" disabled>
             선택하세요
           </option>
@@ -414,7 +333,7 @@ const CustomerContract = () => {
         </SelectBox>
 
         <h5>종료 년도</h5>
-        <SelectBox value={endYear} onChange={handleEndYearChange}>
+        <SelectBox value={endYear} onChange={(e) => setEndYear(e.target.value)}>
           {generateYearOptions().map((year) => (
             <option key={year} value={year.toString()}>
               {year}
@@ -423,7 +342,7 @@ const CustomerContract = () => {
         </SelectBox>
 
         <h5>종료 월</h5>
-        <SelectBox value={endMonth} onChange={handleEndMonthChange} disabled={!endYear}>
+        <SelectBox value={endMonth} onChange={(e) => setEndMonth(e.target.value)} disabled={!endYear}>
           <option value="" disabled>
             선택하세요
           </option>
@@ -435,7 +354,7 @@ const CustomerContract = () => {
         </SelectBox>
 
         <h5>종료 일</h5>
-        <SelectBox value={endDay} onChange={handleEndDayChange} disabled={!endMonth || !endYear}>
+        <SelectBox value={endDay} onChange={(e) => setEndDay(e.target.value)} disabled={!endMonth || !endYear}>
           <option value="" disabled>
             선택하세요
           </option>
@@ -450,7 +369,7 @@ const CustomerContract = () => {
         <InputField
           type="text"
           placeholder="제공인력1의 이름을 입력하세요"
-          onChange={handleCaretaker1NameChange}
+          onChange={(e) => setCaretaker1Name(e.target.value)}
           value={caretaker1Name}
         />
 
@@ -458,12 +377,12 @@ const CustomerContract = () => {
         <InputField
           type="text"
           placeholder="제공인력1의 연락처를 입력하세요"
-          onChange={handleCaretaker1ContactChange}
+          onChange={(e) => setCaretaker1Contact(e.target.value)}
           value={caretaker1Contact}
         />
 
         <h5>본인부담금 수령 년도</h5>
-        <SelectBox value={paymentYear} onChange={handlePaymentYearChange}>
+        <SelectBox value={paymentYear} onChange={(e) => setPaymentYear(e.target.value)}>
           {generateYearOptions().map((year) => (
             <option key={year} value={year.toString()}>
               {year}
@@ -472,7 +391,7 @@ const CustomerContract = () => {
         </SelectBox>
 
         <h5>본인부담금 수령 월</h5>
-        <SelectBox value={paymentMonth} onChange={handlePaymentMonthChange} disabled={!paymentYear}>
+        <SelectBox value={paymentMonth} onChange={(e) => setPaymentMonth(e.target.value)} disabled={!paymentYear}>
           <option value="" disabled>
             선택하세요
           </option>
@@ -484,7 +403,7 @@ const CustomerContract = () => {
         </SelectBox>
 
         <h5>본인부담금 수령 일</h5>
-        <SelectBox value={paymentDay} onChange={handlePaymentDayChange} disabled={!paymentYear || !paymentMonth}>
+        <SelectBox value={paymentDay} onChange={(e) => setPaymentDay(e.target.value)} disabled={!paymentYear || !paymentMonth}>
           <option value="" disabled>
             선택하세요
           </option>
@@ -496,7 +415,7 @@ const CustomerContract = () => {
         </SelectBox>
 
         <h5>영수증 발급 년도</h5>
-        <SelectBox value={receiptYear} onChange={handleReceiptYearChange}>
+        <SelectBox value={receiptYear} onChange={(e) => setReceiptYear(e.target.value)}>
           {generateYearOptions().map((year) => (
             <option key={year} value={year.toString()}>
               {year}
@@ -505,7 +424,7 @@ const CustomerContract = () => {
         </SelectBox>
 
         <h5>영수증 발급 월</h5>
-        <SelectBox value={receiptMonth} onChange={handleReceiptMonthChange} disabled={!receiptYear}>
+        <SelectBox value={receiptMonth} onChange={(e) => setReceiptMonth(e.target.value)} disabled={!receiptYear}>
           <option value="" disabled>
             선택하세요
           </option>
@@ -517,7 +436,7 @@ const CustomerContract = () => {
         </SelectBox>
 
         <h5>영수증 발급 일</h5>
-        <SelectBox value={receiptDay} onChange={handleReceiptDayChange} disabled={!receiptMonth || !receiptYear}>
+        <SelectBox value={receiptDay} onChange={(e) => setReceiptDay(e.target.value)} disabled={!receiptMonth || !receiptYear}>
           <option value="" disabled>
             선택하세요
           </option>
@@ -538,7 +457,7 @@ const CustomerContract = () => {
         </CreateMsgButton>
           
         {isLoading && (
-          <ModalBackdrop onClick={handleModalClick}>
+          <ModalBackdrop onClick={() => setIsLoading(false)}>
             <ModalContent>
               <iframe 
                 id="eformsign_iframe" 
