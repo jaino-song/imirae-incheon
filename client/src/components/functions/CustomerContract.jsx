@@ -66,22 +66,27 @@ const CustomerContract = () => {
     accessToken,
     refreshToken,
     isAuthenticated,
+    // destructuring isLoading from useEformsignAuth and using it as authLoading
     isLoading: authLoading,
     getAccessToken,
     refreshAccessToken
   } = useEformsignAuth();
 
+  // local loading state
   const [isLoading, setIsLoading] = useState(false);
 
+  // load necessary eformsign scripts 
   useEffect(() => {
     loadScripts();
 
+    // remove eformsign scripts when the component unmounts
     return () => {
       const scripts = document.querySelectorAll('script[src*="eformsign.com"]');
       scripts.forEach(script => script.remove());
     };
   }, []);
 
+  // get access token if not authenticated and not loading and not local loading
   useEffect(() => {
     if (!isAuthenticated && !authLoading && !isLoading) {
       getAccessToken().catch(error => {
@@ -115,10 +120,12 @@ const CustomerContract = () => {
     { value: "12", label: "12월" }
   ];
 
+  // get the last day of the month
   const getLastDayOfMonth = (year, month) => {
     return new Date(year, month, 0).getDate();
   };
 
+  // generate days for each month
   const generateDays = (month, year) => {
     if (!month || !year) return [];
 
@@ -136,18 +143,21 @@ const CustomerContract = () => {
     });
   };
 
+  // set start date when start year, month, and day are set or changed
   useEffect(() => {
     if (startYear && startMonth && startDay) {
       setStartDate(`${startYear}${startMonth}${startDay}`);
     }
   }, [startYear, startMonth, startDay]);
 
+  // set end date when end year, month, and day are set or changed
   useEffect(() => {
     if (endYear && endMonth && endDay) {
       setEndDate(`${endYear}${endMonth}${endDay}`);
     }
   }, [endYear, endMonth, endDay]);
 
+  // set contract duration when start date and end date are set or changed
   useEffect(() => {
     if (startDate && endDate) {
       setContractDuration(`${startDate}~${endDate}`);
@@ -155,12 +165,18 @@ const CustomerContract = () => {
   }, [startDate, endDate]);
 
   // Memoize callbacks to prevent re-creation on every render unless dependencies change
+  // success_callback is called when the document is successfully signed
+  // useCallback is used to prevent useEffect from being recreated on every render
+  // setIsLoading(false) is called to hide the modal
   const success_callback = useCallback((res) => {
     console.log('[eformsign_useEffect] success_callback triggered.', res);
     alert('계약서가 성공적으로 전송되었습니다');
     setIsLoading(false);
   }, [setIsLoading]);
 
+  // error_callback is called when the document is not successfully signed
+  // useCallback is used to prevent useEffect from being recreated on every render
+  // setIsLoading(false) is called to hide the modal
   const error_callback = useCallback(async (res, eformsignInstance) => {
     console.error("[eformsign_useEffect] error_callback triggered.", res);
     if (res.code === 401 || res.code === 403) {
@@ -169,12 +185,15 @@ const CustomerContract = () => {
         await refreshAccessToken();
         console.log('[eformsign_useEffect] Token refresh successful, retrying document...');
         
+        // get new access token and refresh token from local storage
         const newAccessToken = localStorage.getItem('eformsign_access_token') || accessToken;
         const newRefreshToken = localStorage.getItem('eformsign_refresh_token') || refreshToken;
 
+        // Generate new document options with new access token and refresh token
         const newDocumentOptions = getDocumentOptions(newAccessToken, newRefreshToken);
         console.log('[eformsign_useEffect] New Document Options after refresh:', JSON.stringify(newDocumentOptions, null, 2));
         
+        // Retry the document with new access token and refresh token
         if (eformsignInstance) {
             eformsignInstance.document(
               newDocumentOptions,
@@ -202,10 +221,13 @@ const CustomerContract = () => {
     console.log('[eformsign_useEffect] action_callback triggered: ', res);
   }, []);
 
+  // initialize eformsign when isLoading is true and isAuthenticated is true
+  // useEffect is used to initialize eformsign when isLoading is true and isAuthenticated is true
   useEffect(() => {
     if (isLoading && isAuthenticated) {
       console.log('[eformsign_useEffect] isLoading is true and authenticated. Initializing eformsign.');
       
+      // check if EformSignDocument is available on window object
       console.log('[eformsign_useEffect] Is EformSignDocument available on window?', typeof window.EformSignDocument);
       if (typeof window.EformSignDocument === 'undefined') {
           alert('eformsign SDK (EformSignDocument) is not loaded. Please check console for script loading errors.');
@@ -213,13 +235,16 @@ const CustomerContract = () => {
           return;
       }
 
+      // instantiate EformSignDocument object 
       const eformsignInstance = new window.EformSignDocument();
       console.log('[eformsign_useEffect] EformSignDocument instantiated.');
 
+      // generate document options with access token and refresh token 
       const documentOptions = getDocumentOptions(accessToken, refreshToken);
       console.log('[eformsign_useEffect] Document Options for eformsign:', JSON.stringify(documentOptions, null, 2)); 
       
       try {
+        // call eformsign.document() with document options, iframe id, success_callback, error_callback, and action_callback
         console.log('[eformsign_useEffect] Calling eformsign.document()...');
         eformsignInstance.document(
           documentOptions,
@@ -239,6 +264,13 @@ const CustomerContract = () => {
     }
   }, [isLoading, isAuthenticated, accessToken, refreshToken, getDocumentOptions, success_callback, error_callback, action_callback, setIsLoading]);
 
+  // handleCreateContract is called when the create contract button is clicked
+  // it checks if the customer name and contact are set
+  // it checks if the user is authenticated
+  // it sets isLoading to true
+  // it calls getAccessToken() to get a new access token
+  // it sets isLoading to true
+  // it calls eformsign.document() to create a new document
   const handleCreateContract = async () => {
     console.log('[handleCreateContract] Clicked.');
     if (!customerName || !customerContact) {
@@ -246,6 +278,7 @@ const CustomerContract = () => {
       return;
     }
 
+    // check if the user is authenticated and if not, get a new access token
     console.log('[handleCreateContract] Checking authentication...');
     if (!isAuthenticated) {
       try {
