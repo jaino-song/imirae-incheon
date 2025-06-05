@@ -13,12 +13,20 @@ const Button = styled.button`
     border-radius: 100px;
     border: none;
     background-color: #fff;
-    font-size: 1em;
+    font-size: 0.8em;
     font-weight: bold;
-    margin: 0.5em;
+    margin: 0.2em 0.5em;
     color: #000;
     text-decoration: none;
     cursor: pointer;
+
+    a:first-child & {
+        margin-left: 2em;
+    }
+
+    a:last-child & {
+        margin-right: 2em;
+    }
 `
 
 const H3 = styled.h3`

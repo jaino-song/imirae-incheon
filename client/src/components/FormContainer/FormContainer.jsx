@@ -12,8 +12,7 @@ const FormContainer = (props) => {
     return (
         <Container>
             <Textarea
-                value={props.msg}
-                readOnly
+                defaultValue={props.msg}
                 rows={25}
                 cols={50}
             />
@@ -28,14 +27,16 @@ const FormContainer = (props) => {
 const Container = styled.div`
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 1rem;
+    width: 100%;
 `;
 
 const Textarea = styled.textarea`
     width: 100%;
     padding: 1rem;
     border: 1px solid #dee2e6;
-    border-radius: 4px;
+    border-radius: 30px;
     font-family: Arial, sans-serif;
     font-size: 1rem;
     line-height: 1.6;
@@ -50,11 +51,14 @@ const Textarea = styled.textarea`
 `;
 
 const CopyButton = styled.button`
+    margin: 1rem;
+    width: 30%;
+    min-width: 150px;
     padding: 1rem 2rem;
     background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 20px;
     cursor: pointer;
     font-size: 1rem;
     transition: background-color 0.2s;
