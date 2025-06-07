@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { Link } from "react-router-dom";
 import LinkButton from "../Buttons/LinkButton";
 
 const NavButton = ({ link, children }) => {
