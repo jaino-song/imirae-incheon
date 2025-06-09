@@ -15,7 +15,7 @@ This is a full-stack web application built with a modern JavaScript stack, featu
 
 The project is organized into a monorepo structure with two main packages: `client` for the frontend application and `server` for the backend.
 
-imirae-incheon/
+imirae-incheon/ <br>
 ├── client/ # Frontend React application<br>
 │ ├── src/<br>
 │ │ ├── assets/ # Static assets like images and logos<br>
