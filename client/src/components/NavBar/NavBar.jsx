@@ -31,7 +31,7 @@ const Logo = styled.img`
     width: 100%;
     position: relative;
     right: 30%;
-    @media (max-width: 1200px) {
+    @media (max-width: 1199px) {
         display: none;
     }
     
@@ -43,7 +43,7 @@ const NavContainer = styled.nav`
     align-items: center;
     gap: 10px;
     margin-top: 3%;
-    @media (max-width: 1200px) {
+    @media (max-width: 1199px) {
         justify-content: left;
     }
 
@@ -52,7 +52,7 @@ const NavContainer = styled.nav`
 const BalancingDiv = styled.div`
     height: 4rem;
     width: 4rem;
-    @media (max-width: 1200px) {
+    @media (max-width: 1199px) {
         display: none;
     }
 `
@@ -65,7 +65,7 @@ const Nav = styled.div`
     border-radius: 100px;
     background-color: #fff;
     height: 5%;
-    @media (max-width: 1200px) {
+    @media (max-width: 1199px) {
         display: none;
     }
 `
