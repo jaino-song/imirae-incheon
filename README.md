@@ -16,20 +16,20 @@ This is a full-stack web application built with a modern JavaScript stack, featu
 The project is organized into a monorepo structure with two main packages: `client` for the frontend application and `server` for the backend.
 
 imirae-incheon/
-├── client/ # Frontend React application
-│ ├── src/
-│ │ ├── assets/ # Static assets like images and logos
-│ │ ├── components/ # Reusable React components (NavBar, Buttons, FormContainer, etc.)
-│ │ ├── store/ # Zustand state management store and actions
-│ │ ├── hooks/ # Custom React hooks for reusable logic
-│ │ └── main.jsx # Main application entry point
-│ ├── vite.config.js # Vite build and development server configuration
-│ └── package.json # Frontend dependencies and scripts
-│
-└── server/ # Backend Express.js application
-├── routes/ # API route handlers (e.g., eformsign.js)
-├── server.js # Express server entry point and configuration
-└── package.json # Backend dependencies and scripts
+├── client/ # Frontend React application<br>
+│ ├── src/<br>
+│ │ ├── assets/ # Static assets like images and logos<br>
+│ │ ├── components/ # Reusable React components (NavBar, Buttons, FormContainer, etc.)<br>
+│ │ ├── store/ # Zustand state management store and actions<br>
+│ │ ├── hooks/ # Custom React hooks for reusable logic<br>
+│ │ └── main.jsx # Main application entry point<br>
+│ ├── vite.config.js # Vite build and development server configuration<br>
+│ └── package.json # Frontend dependencies and scripts<br>
+│<br>
+└── server/ # Backend Express.js application<br>
+├── routes/ # API route handlers (e.g., eformsign.js)<br>
+├── server.js # Express server entry point and configuration<br>
+└── package.json # Backend dependencies and scripts<br>
 
 ## 🛠️ Technology Stack
 
