@@ -42,12 +42,18 @@ const Container = styled.div`
 
 const Title = styled.h1`
   color: #007bff;
-  font-size: 2.5rem;
-  margin: 0;
+    font-size: 2.5rem;
+    margin: 0;
+    
+    @media (min-width: 1200px) {
+            margin-top: 2rem;
+        }
 
-  @media (min-width: 1060px) {
-    margin-top: 2rem;
-  `;
+    @media (max-width: 1200px) {
+        font-size: 2rem;
+    }
+
+`;
 
 const Description = styled.p`
   color: #6c757d;

@@ -4,21 +4,23 @@ import { ImCross } from "react-icons/im";
 import logo from "../../assets/logo.png";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useState } from "react";
+import MobileMenu from "./MobileMenu";
 
 const MobileNavBar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+
     return (
         <Container>
-            <SideContainer>
-                <MenuIcon onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                    {isMenuOpen ? <ImCross /> : <GiHamburgerMenu />}
-                </MenuIcon>
-            </SideContainer>
-            <SideContainer>
-                <Logo src={logo} alt="logo" />
-            </SideContainer>
-            <SideContainer></SideContainer>
-            
+            {isMenuOpen && <MobileMenu setIsMenuOpen={setIsMenuOpen} />}
+                <SideContainer>
+                    <MenuIcon onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                        {isMenuOpen ? <ImCross /> : <GiHamburgerMenu />}
+                    </MenuIcon>
+                </SideContainer>
+                <SideContainer>
+                    <Logo src={logo} alt="logo" display={isMenuOpen ? "none" : "block"}/>
+                </SideContainer>
+                <SideContainer></SideContainer>
             
         </Container>
     )
@@ -33,13 +35,15 @@ const Container = styled.div`
 const SideContainer = styled.div`
     display: flex;
     justify-content: flex-start;
-    flex-grow: 1;
     height: 100%;
+    flex: 1;
 
+    &:first-child {
+        justify-content: flex-start;
+    }
     &:nth-child(2) {
         justify-content: center;
     }
-
 `
 
 const Logo = styled.img`
@@ -48,7 +52,7 @@ const Logo = styled.img`
 
 const MenuIcon = styled.div`
     display: block;
-    font-size: 3rem;
+    font-size: 2rem;
     margin-left: 4%;
     color:rgb(54, 54, 54);
     cursor: pointer;
@@ -57,5 +61,6 @@ const MenuIcon = styled.div`
         font-size: 1.5em;
         cursor: pointer;
     }
+    z-index: 1001;
 `
 export default MobileNavBar;
