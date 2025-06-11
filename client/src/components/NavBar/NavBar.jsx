@@ -1,18 +1,14 @@
 import styled from "@emotion/styled";
 import NavButton from "./NavButton";
 import logo from "../../assets/logo.png";
-import { GiHamburgerMenu } from "react-icons/gi";
 
-const NavBar = ({ isMenuOpen, setIsMenuOpen }) => {
+const NavBar = () => {
     
     return (
         <NavContainer>
             <BalancingDiv>
                 <Logo src={logo} alt="logo" />
             </BalancingDiv>
-            <MenuIcon onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                <GiHamburgerMenu />
-            </MenuIcon>
             <Nav>
                 <NavButton link="/greetings">첫인사</NavButton>
                 <NavButton link="/service-info">서비스 소개</NavButton>
@@ -67,19 +63,6 @@ const Nav = styled.div`
     height: 5%;
     @media (max-width: 1199px) {
         display: none;
-    }
-`
-
-const MenuIcon = styled.div`
-    display: block;
-    font-size: 3rem;
-    margin-left: 4%;
-    color:rgb(54, 54, 54);
-    cursor: pointer;
-    @media (min-width: 1200px) {
-        display: none;
-        font-size: 1.5em;
-        cursor: pointer;
     }
 `
 

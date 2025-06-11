@@ -29,7 +29,8 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 1rem;
-    width: 100%;
+    width: 90%;
+    height: 70vh;
 `;
 
 const Textarea = styled.textarea`
@@ -51,8 +52,8 @@ const Textarea = styled.textarea`
 `;
 
 const CopyButton = styled.button`
-    margin: 1rem;
-    width: 30%;
+    margin: 2rem;
+    width: 70%;
     min-width: 150px;
     padding: 1rem 2rem;
     background-color: #007bff;

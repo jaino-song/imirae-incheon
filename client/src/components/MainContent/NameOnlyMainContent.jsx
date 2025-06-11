@@ -48,7 +48,27 @@ const Container = styled.div`
     padding: 2rem;
     max-width: 800px;
     margin: 0 auto;
-`;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 20px;
+    height: 100%;
+
+    @media (max-width: 1200px) {
+        max-width: 900px;
+        width: 90%;
+    }
+
+    @media (max-width: 768px) {
+        max-width: 700px;
+        width: 90%;
+    }
+    
+    @media (max-width: 480px) {
+        max-width: 500px;
+        width: 90%;
+    }`;
 
 const Title = styled.h1`
     color: #007bff;
