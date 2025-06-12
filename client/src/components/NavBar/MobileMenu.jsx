@@ -1,22 +1,26 @@
 import styled from "@emotion/styled";
-import { Link } from "react-router-dom";
-import MobileNavButton from "./MobileNavButton";
+import MobileNavButton from "./MobileNavButton";    
 
 const MobileMenu = ({ setIsMenuOpen }) => {
+    
+    const handleClose = () => {
+        setIsMenuOpen(false);
+    };
+
     return (
         <>
             <NavContainer>
                 <Nav>
-                    <MobileNavButton link="/greetings" onClick={() => setIsMenuOpen(false)}>첫인사</MobileNavButton>
-                    <MobileNavButton link="/service-info" onClick={() => setIsMenuOpen(false)}>서비스 소개</MobileNavButton>
-                    <MobileNavButton link="/price-info" onClick={() => setIsMenuOpen(false)}>금액 및 계좌번호</MobileNavButton>
-                    <MobileNavButton link="/reminder" onClick={() => setIsMenuOpen(false)}>상담 후 리마인더</MobileNavButton>
-                    <MobileNavButton link="/thanks" onClick={() => setIsMenuOpen(false)}>예약 완료</MobileNavButton>
-                    <MobileNavButton link="/survey" onClick={() => setIsMenuOpen(false)}>모니터링 설문</MobileNavButton>
-                    <MobileNavButton link="/contract" onClick={() => setIsMenuOpen(false)}>산모계약서</MobileNavButton>
+                    <MobileNavButton link="/greetings" onClick={handleClose}>첫인사</MobileNavButton>
+                    <MobileNavButton link="/service-info" onClick={handleClose}>서비스 소개</MobileNavButton>
+                    <MobileNavButton link="/price-info" onClick={handleClose}>금액 및 계좌번호</MobileNavButton>
+                    <MobileNavButton link="/reminder" onClick={handleClose}>상담 후 리마인더</MobileNavButton>
+                    <MobileNavButton link="/thanks" onClick={handleClose}>예약 완료</MobileNavButton>
+                    <MobileNavButton link="/survey" onClick={handleClose}>모니터링 설문</MobileNavButton>
+                    <MobileNavButton link="/contract" onClick={handleClose}>산모계약서</MobileNavButton>
                 </Nav>
             </NavContainer>
-            <Container onClick={() => setIsMenuOpen(false)} />
+            <Container onClick={handleClose} />
         </>
     )
 }
@@ -29,7 +33,7 @@ const Container = styled.div`
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 999;
+    z-index: 900;
     animation: fadeIn 0.5s ease-in-out; 
 
     @keyframes fadeIn {
@@ -54,11 +58,11 @@ const NavContainer = styled.div`
     z-index: 1000;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
     border-radius: 0 0 20px 20px;
-    animation: fadeIn 1s ease-in-out; 
+    animation: fadeIn 0.5s ease-in-out; 
 
     @keyframes fadeIn {
         from {
-            opacity: 0.5;
+            opacity: 0;
         }
         to {
             opacity: 1;

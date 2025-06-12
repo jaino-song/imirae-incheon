@@ -47,7 +47,7 @@ const NameOnlyMainContent = (props) => {
 const Container = styled.div`
     padding: 2rem;
     max-width: 900px;
-    margin: 2% auto;
+    margin: 5% auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -100,12 +100,14 @@ const InputField = styled.input`
 `;
 
 const CreateMsgButton = styled.button`
-    padding: 0.5rem 1rem;
     margin: 2rem;
+    width: 30vw;
+    min-width: 150px;
+    padding: 1rem 2rem;
     background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 20px;
     cursor: pointer;
     font-size: 1rem;
     transition: background-color 0.2s;

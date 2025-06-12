@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import FormContainer from "../FormContainer/FormContainer";
 import useSupabase from "../hooks/useSupabase";
@@ -24,6 +24,7 @@ const PriceMainContent = (props) => {
     
     // Show message when data fetching for db is complete
     const [showMsg, setShowMsg] = useState(false);
+    const [isGrayedOut, setIsGrayedOut] = useState(false);
     // Message state
     const [msg, setMsg] = useState('');
     // useSupabase custom hook
@@ -60,6 +61,8 @@ const PriceMainContent = (props) => {
     const handleCreateMsgButton = async () => {
         if (!type || !days || !customerName || !area) return;
 
+        setIsGrayedOut(false);
+
         try {
             const [voucherResponse, areaResponse] = await Promise.all([
                 fetchVoucherData(type, days),
@@ -71,6 +74,7 @@ const PriceMainContent = (props) => {
                 return;
             }
 
+            console.log('1',useContractStore.getState().fullPrice);
             // Update price data in store
             useContractStore.getState().setPriceData({
                 fullPrice: voucherResponse.data[0].fullPrice,
@@ -79,6 +83,7 @@ const PriceMainContent = (props) => {
                 accNum: areaResponse.data[0].accNum,
                 bankName: areaResponse.data[0].bankName
             });
+            console.log('2',useContractStore.getState().fullPrice);
 
             // Build the message
             const completedMsg = props.preText
@@ -86,11 +91,11 @@ const PriceMainContent = (props) => {
                 .replace('{type}', type)
                 .replace('{days}', days)
                 .replace('{weeks}', weeksCalculator(days))
-                .replace('{fullPrice}', voucherResponse.data[0].fullPrice)
-                .replace('{grant}', voucherResponse.data[0].grant)
-                .replace('{actualPrice}', voucherResponse.data[0].actualPrice)
-                .replace('{accNum}', areaResponse.data[0].accNum)
-                .replace('{bankName}', areaResponse.data[0].bankName)
+                .replace('{fullPrice}', useContractStore.getState().fullPrice)
+                .replace('{grant}', useContractStore.getState().grant)
+                .replace('{actualPrice}', useContractStore.getState().actualPrice)
+                .replace('{accNum}', useContractStore.getState().accNum)
+                .replace('{bankName}', useContractStore.getState().bankName)
                 .replace('{area}', area);
             
             setMsg(completedMsg);
@@ -106,6 +111,10 @@ const PriceMainContent = (props) => {
             setShowMsg(true);
         }
     }
+
+    useEffect(() => {
+        setIsGrayedOut(true);
+    }, [type, days, area]);
 
     return (
         <Container>
@@ -185,6 +194,8 @@ const PriceMainContent = (props) => {
             >
                 메시지 생성
             </CreateMsgButton>
+            {showMsg && ( <FormContainer msg={msg} isGrayedOut={isGrayedOut} /> )}
+            {showMsg && (
             <LinkButton 
                 routeLink="/contract" 
                 TextStyle={H3} 
@@ -193,34 +204,51 @@ const PriceMainContent = (props) => {
             >
                 계약서 생성
             </LinkButton>
-
-            {showMsg && (
-                <FormContainerWrapper $isGrayedOut={!type || !days || !area}>
-                    <FormContainer msg={msg} />
-                </FormContainerWrapper>
             )}
-
         </Container>
     );
 };
 
-const FormContainerWrapper = styled.div`
-    opacity: ${(props) => (props.$isGrayedOut ? 0.5 : 1)};
-    filter: ${(props) => (props.$isGrayedOut ? "grayscale(100%)" : "none")};
-    pointer-events: ${(props) => (props.$isGrayedOut ? "none" : "auto")};
-`
-
 // Styled components
 const Container = styled.div`
     padding: 2rem;
-    max-width: 800px;
-    margin: 0 auto;
+    max-width: 900px;
+    margin: 5% auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 30px;
+    height: 70%;
+
+    @media (max-width: 1200px) {
+        max-width: 900px;
+        width: 80%;
+    }
+
+    @media (max-width: 768px) {
+        max-width: 700px;
+        width: 80%;
+    }
+    
+    @media (max-width: 480px) {
+        max-width: 500px;
+        width: 80%;
+    }
 `;
 
 const Title = styled.h1`
     color: #007bff;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+    font-size: 2.5rem;
+    margin: 0;
+    
+    @media (min-width: 1200px) {
+            margin-top: 2rem;
+        }
+
+    @media (max-width: 1200px) {
+        font-size: 2rem;
+    }
 `;
 
 const Description = styled.p`
@@ -234,6 +262,9 @@ const InputField = styled.input`
     border-radius: 4px;
     font-size: 1rem;
     margin-bottom: 1rem;
+    width: 50vw;
+    min-width: 150px;
+    box-sizing: border-box;
 `;
 
 const SelectBox = styled.select`
@@ -241,8 +272,10 @@ const SelectBox = styled.select`
     border: 1px solid #dee2e6;
     border-radius: 4px;
     font-size: 1rem;
-    width: 100%;
+    width: 50vw;
     margin-bottom: 1rem;
+    min-width: 150px;
+    box-sizing: border-box;
 
     &:focus {
         outline: none;
@@ -260,12 +293,14 @@ const OptionGroup = styled.optgroup`
 `;
 
 const CreateMsgButton = styled.button`
-    padding: 0.5rem 1rem;
     margin: 2rem;
+    width: 50vw;
+    min-width: 150px;
+    padding: 1rem 2rem;
     background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 20px;
     cursor: pointer;
     font-size: 1rem;
     transition: background-color 0.2s;
@@ -281,17 +316,21 @@ const CreateMsgButton = styled.button`
 `;
 
 const H4 = styled.h4`
-
+    margin: 0.5rem;
 `
 
 const ContractNavBtn = styled.button`
-    padding: 0.5rem 1rem;
     margin: 2rem;
+    width: 50vw;
+    height: 5vh;
+    min-width: 150px;
+    padding: 1rem 2rem;
     background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 20px;
     cursor: pointer;
+    font-size: 1rem;
     transition: background-color 0.2s;
 
     &:hover {

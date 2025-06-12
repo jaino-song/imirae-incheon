@@ -1,18 +1,29 @@
 import styled from "@emotion/styled";
 import useClipboard from "../hooks/useClipboard";
+import { useState, useEffect } from "react";
 
 const FormContainer = (props) => {
     const { copyToClipboard } = useClipboard();
+    const [text, setText] = useState(props.msg);
+
+    useEffect(() => {
+        setText(props.msg);
+    }, [props.msg]);
 
     const handleCopyClick = () => {
         copyToClipboard(props.msg);
         alert('클립보드에 복사되었습니다');
     };
 
+    const handleTextChange = (e) => {
+        setText(e.target.value);
+    };
+
     return (
-        <Container>
+        <Container isGrayedOut={props.isGrayedOut}>
             <Textarea
-                defaultValue={props.msg}
+                value={text}
+                onChange={handleTextChange}
                 rows={25}
                 cols={50}
             />
@@ -31,6 +42,10 @@ const Container = styled.div`
     gap: 1rem;
     width: 90%;
     height: 70vh;
+    margin: 2rem;
+    opacity: ${(props) => (props.isGrayedOut ? 0.5 : 1)};
+    filter: ${(props) => (props.isGrayedOut ? "grayscale(100%)" : "none")};
+    pointer-events: ${(props) => (props.isGrayedOut ? "none" : "auto")};
 `;
 
 const Textarea = styled.textarea`
@@ -53,7 +68,7 @@ const Textarea = styled.textarea`
 
 const CopyButton = styled.button`
     margin: 2rem;
-    width: 70%;
+    width: 30vw;
     min-width: 150px;
     padding: 1rem 2rem;
     background-color: #007bff;

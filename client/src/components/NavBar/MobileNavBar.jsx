@@ -17,9 +17,9 @@ const MobileNavBar = () => {
                         {isMenuOpen ? <ImCross /> : <GiHamburgerMenu />}
                     </MenuIcon>
                 </SideContainer>
-                <SideContainer>
+                <LogoContainer>
                     <Logo src={logo} alt="logo" display={isMenuOpen ? "none" : "block"}/>
-                </SideContainer>
+                </LogoContainer>
                 <SideContainer></SideContainer>
             
         </Container>
@@ -34,16 +34,16 @@ const Container = styled.div`
 `
 const SideContainer = styled.div`
     display: flex;
-    justify-content: flex-start;
     height: 100%;
     flex: 1;
+    justify-content: flex-start;
+`
 
-    &:first-child {
-        justify-content: flex-start;
-    }
-    &:nth-child(2) {
-        justify-content: center;
-    }
+const LogoContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
 `
 
 const Logo = styled.img`
