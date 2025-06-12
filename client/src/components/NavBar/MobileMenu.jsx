@@ -1,15 +1,24 @@
 import styled from "@emotion/styled";
 import MobileNavButton from "./MobileNavButton";    
+import { ImCross } from "react-icons/im";
+import { useState } from "react";
 
-const MobileMenu = ({ setIsMenuOpen }) => {
-    
+const MobileMenu = ({ setIsMenuOpen, isMenuOpen }) => {
+    const [isClosing, setIsClosing] = useState(false);
+
     const handleClose = () => {
-        setIsMenuOpen(false);
-    };
+        setIsClosing(true);
+        setTimeout(() => {
+            setIsMenuOpen(false);
+        }, 500);
+    }
 
     return (
         <>
-            <NavContainer>
+            <NavContainer isMenuOpen={!isClosing}>
+                <CloseButton onClick={handleClose}>
+                    <ImCross />
+                </CloseButton>
                 <Nav>
                     <MobileNavButton link="/greetings" onClick={handleClose}>첫인사</MobileNavButton>
                     <MobileNavButton link="/service-info" onClick={handleClose}>서비스 소개</MobileNavButton>
@@ -20,7 +29,7 @@ const MobileMenu = ({ setIsMenuOpen }) => {
                     <MobileNavButton link="/contract" onClick={handleClose}>산모계약서</MobileNavButton>
                 </Nav>
             </NavContainer>
-            <Container onClick={handleClose} />
+            <Container isClosing={isClosing} onClick={handleClose} />
         </>
     )
 }
@@ -34,15 +43,16 @@ const Container = styled.div`
     top: 0;
     left: 0;
     z-index: 900;
-    animation: fadeIn 0.5s ease-in-out; 
+    animation: ${props => props.isClosing ? 'fadeOut' : 'fadeIn'} 0.5s ease-in-out; 
 
     @keyframes fadeIn {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 0.5;
-        }
+        from { opacity: 0; }
+        to { opacity: 0.5; }
+    }
+
+    @keyframes fadeOut {
+        from { opacity: 0.5; }
+        to { opacity: 0; }
     }
 `
 
@@ -50,6 +60,7 @@ const NavContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     width: 100%;
     position: absolute;
     top: 0;
@@ -58,17 +69,17 @@ const NavContainer = styled.div`
     z-index: 1000;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
     border-radius: 0 0 20px 20px;
-    animation: fadeIn 0.5s ease-in-out; 
+    animation: ${props => props.isMenuOpen ? 'slideIn' : 'slideOut'} 0.5s ease-in-out; 
 
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
+    @keyframes slideIn {
+        from { transform: translateY(-100%); }
+        to { transform: translateY(0); }
+    }  
+
+    @keyframes slideOut {
+        from { transform: translateY(0); }
+        to { transform: translateY(-100%); }
     }
-
 `
 
 const Nav = styled.div`
@@ -81,6 +92,14 @@ const Nav = styled.div`
     gap: 1em;
     padding: 1em;
     justify-items: center;
+`
+
+const CloseButton = styled.div`
+    position: absolute;
+    top: 4%;
+    left: 4%;
+    font-size: 1.7rem;
+    cursor: pointer;
 `
 
 export default MobileMenu;

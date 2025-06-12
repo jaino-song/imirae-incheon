@@ -11,10 +11,10 @@ const MobileNavBar = () => {
 
     return (
         <Container>
-            {isMenuOpen && <MobileMenu setIsMenuOpen={setIsMenuOpen} />}
+            {isMenuOpen && <MobileMenu setIsMenuOpen={setIsMenuOpen} isMenuOpen={isMenuOpen} />}
                 <SideContainer>
-                    <MenuIcon onClick={() => setIsMenuOpen(!isMenuOpen)}>
-                        {isMenuOpen ? <ImCross /> : <GiHamburgerMenu />}
+                    <MenuIcon isMenuOpen={isMenuOpen} onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                        <GiHamburgerMenu />
                     </MenuIcon>
                 </SideContainer>
                 <LogoContainer>
@@ -61,6 +61,5 @@ const MenuIcon = styled.div`
         font-size: 1.5em;
         cursor: pointer;
     }
-    z-index: 1001;
 `
 export default MobileNavBar;

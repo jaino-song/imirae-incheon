@@ -41,8 +41,8 @@ const Container = styled.div`
     align-items: center;
     gap: 1rem;
     width: 90%;
-    height: 70vh;
-    margin: 2rem;
+    height: 60vh;
+    margin: 1rem;
     opacity: ${(props) => (props.isGrayedOut ? 0.5 : 1)};
     filter: ${(props) => (props.isGrayedOut ? "grayscale(100%)" : "none")};
     pointer-events: ${(props) => (props.isGrayedOut ? "none" : "auto")};
@@ -68,7 +68,7 @@ const Textarea = styled.textarea`
 
 const CopyButton = styled.button`
     margin: 2rem;
-    width: 30vw;
+    width: 50vw;
     min-width: 150px;
     padding: 1rem 2rem;
     background-color: #007bff;
@@ -81,6 +81,11 @@ const CopyButton = styled.button`
 
     &:hover {
         background-color: #0056b3;
+    }
+
+    &:disabled {
+        background-color: #6c757d;
+        cursor: not-allowed;
     }
 `;
 

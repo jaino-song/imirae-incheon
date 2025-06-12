@@ -314,15 +314,17 @@ const CreateMsgButton = styled.button`
         cursor: not-allowed;
     }
 `;
-
+const H3 = styled.h3`
+    display: inline-block;
+    font-size: 1rem;
+    margin: 0;
+`
 const H4 = styled.h4`
     margin: 0.5rem;
 `
 
 const ContractNavBtn = styled.button`
-    margin: 2rem;
     width: 50vw;
-    height: 5vh;
     min-width: 150px;
     padding: 1rem 2rem;
     background-color: #007bff;
@@ -342,11 +344,4 @@ const ContractNavBtn = styled.button`
         cursor: not-allowed;
     }
 `
-
-const H3 = styled.h3`
-    display: block;
-    font-size: 1rem;
-    font-weight: bold;
-`
-
 export default PriceMainContent;
