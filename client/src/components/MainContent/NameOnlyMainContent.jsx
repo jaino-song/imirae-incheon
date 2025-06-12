@@ -101,7 +101,7 @@ const InputField = styled.input`
 
 const CreateMsgButton = styled.button`
     margin: 2rem;
-    width: 30vw;
+    width: 50vw;
     min-width: 150px;
     padding: 1rem 2rem;
     background-color: #007bff;
@@ -114,6 +114,11 @@ const CreateMsgButton = styled.button`
 
     &:hover {
         background-color: #0056b3;
+    }
+
+    &:disabled {
+        background-color: #6c757d;
+        cursor: not-allowed;
     }
 `
 

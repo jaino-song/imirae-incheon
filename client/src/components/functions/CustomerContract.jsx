@@ -548,8 +548,8 @@ const CustomerContract = () => {
             <ModalContent>
               <iframe 
                 id="eformsign_iframe" 
-                width="1440"
-                height="1024"
+                width="100%"
+                height="100%"
                 style={{ border: 'none' }}
               />
             </ModalContent>
@@ -712,12 +712,10 @@ const ModalContent = styled.div`
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 90%; // Or a fixed width like 1200px
-  height: 90%; // Or a fixed height like 800px
-  max-width: 1440px; // Corresponds to original iframe width
-  max-height: 1024px; // Corresponds to original iframe height
-  display: flex; // To help center iframe if it's smaller
-  flex-direction: column; // Stack elements if you add a close button later
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 const SectionDivider = styled.div`
