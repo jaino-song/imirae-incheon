@@ -16,7 +16,7 @@ const NavBar = () => {
                 <NavButton link="/reminder">상담 후 리마인더</NavButton>
                 <NavButton link="/thanks">예약 완료</NavButton>
                 <NavButton link="/survey">모니터링 설문</NavButton>
-                <NavButton link="/contract">산모계약서</NavButton>
+                <NavButton link="/contract">전자계약서</NavButton>
             </Nav>
             <BalancingDiv></BalancingDiv>
         </NavContainer>

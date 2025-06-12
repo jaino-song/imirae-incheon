@@ -299,195 +299,249 @@ const CustomerContract = () => {
   return (
     <div>
       <Container>
-        <H4>산모님 성함</H4>
-        <InputField
-          type="text"
-          placeholder="산모님 이름을 입력하세요"
-          onChange={(e) => setCustomerName(e.target.value)}
-          value={customerName}
-        />
+        <Title>전자계약서 작성</Title>
+        <H3>산모님 인적사항</H3>
+        <GridWrapper>
+          <CustomerInfoInputContainer>
+            <H4>산모님 성함</H4>
+            <InputField
+              type="text"
+              placeholder="산모님 이름을 입력하세요"
+              onChange={(e) => setCustomerName(e.target.value)}
+              value={customerName}
+            />
+          </CustomerInfoInputContainer>
 
-        <H4>산모님 휴대전화 번호</H4>
-        <InputField
-          type="text"
-          placeholder="산모님 휴대전화 번호을 입력하세요"
-          onChange={(e) => setCustomerContact(e.target.value)}
-          value={customerContact}
-        />
+          <CustomerInfoInputContainer>
+          <H4>산모님 휴대전화 번호</H4>
+            <InputField
+              type="text"
+              placeholder="산모님 휴대전화 번호을 입력하세요"
+              onChange={(e) => setCustomerContact(e.target.value)}
+              value={customerContact}
+            />
+          </CustomerInfoInputContainer>
 
-        <H4>산모님 생년월일</H4>
-        <InputField
-          type="text"
-          placeholder="생년월일 6자리 (YYMMDD)"
-          onChange={(e) => setCustomerDOB(e.target.value)}
-          value={customerDOB}
-        />
+          <CustomerInfoInputContainer>
+            <H4>산모님 생년월일</H4>
+            <InputField
+              type="text"
+              placeholder="생년월일 6자리 (YYMMDD)"
+              onChange={(e) => setCustomerDOB(e.target.value)}
+              value={customerDOB}
+            />
+          </CustomerInfoInputContainer>
 
-        <H4>산모님 주소</H4>
-        <InputField
-          type="text"
-          placeholder="산모님 주소를 입력하세요"
-          onChange={(e) => setCustomerAddress(e.target.value)}
-          value={customerAddress}
-        />
+          <CustomerInfoInputContainer>
+            <H4>산모님 주소</H4>
+            <InputField
+              type="text"
+              placeholder="산모님 주소를 입력하세요"
+              onChange={(e) => setCustomerAddress(e.target.value)}
+              value={customerAddress}
+            />
+          </CustomerInfoInputContainer>
+        </GridWrapper>
 
-        <H4>계약 기간</H4>
-        <h5>시작 년도</h5>
-        <SelectBox value={startYear} onChange={(e) => setStartYear(e.target.value)}>
-          {generateYearOptions().map((year) => (
-            <option key={year} value={year.toString()}>
-              {year}
-            </option>
-          ))}
-        </SelectBox>
+        <SectionDivider />
 
-        <h5>시작 월</h5>
-        <SelectBox value={startMonth} onChange={(e) => setStartMonth(e.target.value)} disabled={!startYear}>
-          <option value="" disabled>
-            선택하세요
-          </option>
-          {months.map((month) => (
-            <option key={month.value} value={month.value}>
-              {month.label}
-            </option>
-          ))}
-        </SelectBox>
+        <H3>계약 기간</H3>
+        <GridWrapper>
+          <ContractInfoInputContainer>
+            <H4>시작 년도</H4>
+            <SelectBox value={startYear} onChange={(e) => setStartYear(e.target.value)}>
+              {generateYearOptions().map((year) => (
+                <option key={year} value={year.toString()}>
+                  {year}
+                </option>
+              ))}
+            </SelectBox>
+          </ContractInfoInputContainer>
 
-        <h5>시작 일</h5>
-        <SelectBox value={startDay} onChange={(e) => setStartDay(e.target.value)} disabled={!startMonth || !startYear}>
-          <option value="" disabled>
-            선택하세요
-          </option>
-          {generateDays(startMonth, startYear).map((day) => (
-            <option key={day.value} value={day.value}>
-              {day.label}
-            </option>
-          ))}
-        </SelectBox>
+          <ContractInfoInputContainer>
+            <H4>시작 월</H4>
+            <SelectBox value={startMonth} onChange={(e) => setStartMonth(e.target.value)} disabled={!startYear}>
+              <option value="" disabled>
+                선택하세요
+              </option>
+              {months.map((month) => (
+                <option key={month.value} value={month.value}>
+                  {month.label}
+                </option>
+              ))}
+            </SelectBox>
+          </ContractInfoInputContainer>
+          
+          <ContractInfoInputContainer>
+            <H4>시작 일</H4>
+            <SelectBox value={startDay} onChange={(e) => setStartDay(e.target.value)} disabled={!startMonth || !startYear}>
+              <option value="" disabled>
+                선택하세요
+              </option>
+              {generateDays(startMonth, startYear).map((day) => (
+                <option key={day.value} value={day.value}>
+                  {day.label}
+                </option>
+              ))}
+            </SelectBox>
+          </ContractInfoInputContainer>
 
-        <h5>종료 년도</h5>
-        <SelectBox value={endYear} onChange={(e) => setEndYear(e.target.value)}>
-          {generateYearOptions().map((year) => (
-            <option key={year} value={year.toString()}>
-              {year}
-            </option>
-          ))}
-        </SelectBox>
+          <ContractInfoInputContainer>
+            <H4>종료 년도</H4>
+            <SelectBox value={endYear} onChange={(e) => setEndYear(e.target.value)}>
+              {generateYearOptions().map((year) => (
+                <option key={year} value={year.toString()}>
+                  {year}
+                </option>
+              ))}
+            </SelectBox>
+          </ContractInfoInputContainer>
 
-        <h5>종료 월</h5>
-        <SelectBox value={endMonth} onChange={(e) => setEndMonth(e.target.value)} disabled={!endYear}>
-          <option value="" disabled>
-            선택하세요
-          </option>
-          {months.map((month) => (
-            <option key={month.value} value={month.value}>
-              {month.label}
-            </option>
-          ))}
-        </SelectBox>
+          <ContractInfoInputContainer>
+            <H4>종료 월</H4>
+            <SelectBox value={endMonth} onChange={(e) => setEndMonth(e.target.value)} disabled={!endYear}>
+              <option value="" disabled>
+                선택하세요
+              </option>
+              {months.map((month) => (
+                <option key={month.value} value={month.value}>
+                  {month.label}
+                </option>
+              ))}
+            </SelectBox>
+          </ContractInfoInputContainer>
 
-        <h5>종료 일</h5>
-        <SelectBox value={endDay} onChange={(e) => setEndDay(e.target.value)} disabled={!endMonth || !endYear}>
-          <option value="" disabled>
-            선택하세요
-          </option>
-          {generateDays(endMonth, endYear).map((day) => (
-            <option key={day.value} value={day.value}>
-              {day.label}
-            </option>
-          ))}
-        </SelectBox>
+          <ContractInfoInputContainer>
+          <H4>종료 일</H4>
+            <SelectBox value={endDay} onChange={(e) => setEndDay(e.target.value)} disabled={!endMonth || !endYear}>
+              <option value="" disabled>
+                선택하세요
+              </option>
+              {generateDays(endMonth, endYear).map((day) => (
+                <option key={day.value} value={day.value}>
+                  {day.label}
+                </option>
+              ))}
+            </SelectBox>
+          </ContractInfoInputContainer>
+        </GridWrapper>
 
-        <h5>제공인력 1 성명</h5>
-        <InputField
-          type="text"
-          placeholder="제공인력1의 이름을 입력하세요"
-          onChange={(e) => setCaretaker1Name(e.target.value)}
-          value={caretaker1Name}
-        />
+        <SectionDivider />
 
-        <h5>제공인력 1 연락처</h5>
-        <InputField
-          type="text"
-          placeholder="제공인력1의 연락처를 입력하세요"
-          onChange={(e) => setCaretaker1Contact(e.target.value)}
-          value={caretaker1Contact}
-        />
+        <H3>제공인력 정보</H3>
 
-        <h5>본인부담금 수령 년도</h5>
-        <SelectBox value={paymentYear} onChange={(e) => setPaymentYear(e.target.value)}>
-          {generateYearOptions().map((year) => (
-            <option key={year} value={year.toString()}>
-              {year}
-            </option>
-          ))}
-        </SelectBox>
+        <GridWrapper>
+          <ProviderInfoInputContainer>
+            <H4>제공인력 1 성명</H4>
+            <InputField
+              type="text"
+              placeholder="제공인력1의 이름을 입력하세요"
+              onChange={(e) => setCaretaker1Name(e.target.value)}
+              value={caretaker1Name}
+            />
+          </ProviderInfoInputContainer>
 
-        <h5>본인부담금 수령 월</h5>
-        <SelectBox value={paymentMonth} onChange={(e) => setPaymentMonth(e.target.value)} disabled={!paymentYear}>
-          <option value="" disabled>
-            선택하세요
-          </option>
-          {months.map((month) => (
-            <option key={month.value} value={month.value}>
-              {month.label}
-            </option>
-          ))}
-        </SelectBox>
+          <ProviderInfoInputContainer>
+            <H4>제공인력 1 연락처</H4>
+            <InputField
+              type="text"
+              placeholder="제공인력1의 연락처를 입력하세요"
+              onChange={(e) => setCaretaker1Contact(e.target.value)}
+              value={caretaker1Contact}
+            />
+          </ProviderInfoInputContainer>
+        </GridWrapper>
 
-        <h5>본인부담금 수령 일</h5>
-        <SelectBox value={paymentDay} onChange={(e) => setPaymentDay(e.target.value)} disabled={!paymentYear || !paymentMonth}>
-          <option value="" disabled>
-            선택하세요
-          </option>
-          {generateDays(paymentMonth, paymentYear).map((day) => (
-            <option key={day.value} value={day.value}>
-              {day.label}
-            </option>
-          ))}
-        </SelectBox>
+        <SectionDivider />
 
-        <h5>영수증 발급 년도</h5>
-        <SelectBox value={receiptYear} onChange={(e) => setReceiptYear(e.target.value)}>
-          {generateYearOptions().map((year) => (
-            <option key={year} value={year.toString()}>
-              {year}
-            </option>
-          ))}
-        </SelectBox>
+        <H3>영수증 정보</H3>
 
-        <h5>영수증 발급 월</h5>
-        <SelectBox value={receiptMonth} onChange={(e) => setReceiptMonth(e.target.value)} disabled={!receiptYear}>
-          <option value="" disabled>
-            선택하세요
-          </option>
-          {months.map((month) => (
-            <option key={month.value} value={month.value}>
-              {month.label}
-            </option>
-          ))}
-        </SelectBox>
+        <GridWrapper>
+          <ReceiptInfoInputContainer>
+            <H4>본인부담금 수령 년도</H4>
+            <SelectBox value={paymentYear} onChange={(e) => setPaymentYear(e.target.value)}>
+              {generateYearOptions().map((year) => (
+                <option key={year} value={year.toString()}>
+                  {year}
+                </option>
+              ))}
+            </SelectBox>
+          </ReceiptInfoInputContainer>
 
-        <h5>영수증 발급 일</h5>
-        <SelectBox value={receiptDay} onChange={(e) => setReceiptDay(e.target.value)} disabled={!receiptMonth || !receiptYear}>
-          <option value="" disabled>
-            선택하세요
-          </option>
-          {generateDays(receiptMonth, receiptYear).map((day) => (
-            <option key={day.value} value={day.value}>
-              {day.label}
-            </option>
-          ))}
-        </SelectBox>
+          <ReceiptInfoInputContainer>
+            <H4>본인부담금 수령 월</H4>
+            <SelectBox value={paymentMonth} onChange={(e) => setPaymentMonth(e.target.value)} disabled={!paymentYear}>
+              <option value="" disabled>
+                선택하세요
+              </option>
+              {months.map((month) => (
+                <option key={month.value} value={month.value}>
+                  {month.label}
+                </option>
+              ))}
+            </SelectBox>
+          </ReceiptInfoInputContainer>
 
-        <h3>{contractDuration}</h3>
+          <ReceiptInfoInputContainer>
+            <H4>본인부담금 수령 일</H4>
+            <SelectBox value={paymentDay} onChange={(e) => setPaymentDay(e.target.value)} disabled={!paymentYear || !paymentMonth}>
+              <option value="" disabled>
+                선택하세요
+              </option>
+              {generateDays(paymentMonth, paymentYear).map((day) => (
+                <option key={day.value} value={day.value}>
+                  {day.label}
+                </option>
+              ))}
+            </SelectBox>
+          </ReceiptInfoInputContainer>
 
-        <CreateMsgButton
+          <ReceiptInfoInputContainer>
+            <H4>영수증 발급 년도</H4>
+            <SelectBox value={receiptYear} onChange={(e) => setReceiptYear(e.target.value)}>
+              {generateYearOptions().map((year) => (
+                <option key={year} value={year.toString()}>
+                  {year}
+                </option>
+              ))}
+            </SelectBox>
+          </ReceiptInfoInputContainer>
+
+          <ReceiptInfoInputContainer>
+            <H4>영수증 발급 월</H4>
+            <SelectBox value={receiptMonth} onChange={(e) => setReceiptMonth(e.target.value)} disabled={!receiptYear}>
+              <option value="" disabled>
+                선택하세요
+              </option>
+              {months.map((month) => (
+                <option key={month.value} value={month.value}>
+                  {month.label}
+                </option>
+              ))}
+            </SelectBox>
+          </ReceiptInfoInputContainer>
+
+          <ReceiptInfoInputContainer>
+            <H4>영수증 발급 일</H4>
+            <SelectBox value={receiptDay} onChange={(e) => setReceiptDay(e.target.value)} disabled={!receiptMonth || !receiptYear}>
+              <option value="" disabled>
+                선택하세요
+              </option>
+              {generateDays(receiptMonth, receiptYear).map((day) => (
+                <option key={day.value} value={day.value}>
+                  {day.label}
+                </option>
+              ))}
+            </SelectBox>
+          </ReceiptInfoInputContainer>
+        </GridWrapper>
+
+        <ContractSendButton
           onClick={handleCreateContract}
           disabled={isLoading || authLoading}
         >
           {isLoading ? '계약서 처리 중...' : (authLoading ? '인증 중...' : '계약서 전송')}
-        </CreateMsgButton>
+        </ContractSendButton>
           
         {isLoading && (
           <ModalBackdrop onClick={() => setIsLoading(false)}>
@@ -507,26 +561,65 @@ const CustomerContract = () => {
 };
 
 const Container = styled.div`
-    padding: 2rem;
-    max-width: 800px;
-    margin: 0 auto;
+    padding: 2rem 1.3rem;
+    max-width: 900px;
+    margin: 5% auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 30px;
+    height: 70%;
+
+    @media (max-width: 1200px) {
+        max-width: 900px;
+        width: 80%;
+    }
+
+    @media (max-width: 768px) {
+        max-width: 700px;
+        width: 80%;
+    }
+    
+    @media (max-width: 480px) {
+        max-width: 500px;
+        width: 80%;
+    }
+`;
+
+const Title = styled.h1`
+    color: #007bff;
+    font-size: 2.5rem;
+    margin: 0;
+    
+    @media (min-width: 1200px) {
+            margin-top: 2rem;
+        }
+
+    @media (max-width: 1200px) {
+        font-size: 2rem;
+    }
 `;
 
 const InputField = styled.input`
     padding: 0.5rem;
     border: 1px solid #dee2e6;
+    width: 100%;
     border-radius: 4px;
-    font-size: 1rem;
+    font-size: 0.8rem;
     margin-bottom: 1rem;
+    box-sizing: border-box;
 `;
 
-const CreateMsgButton = styled.button`
-    padding: 0.5rem 1rem;
+const ContractSendButton = styled.button`
     margin: 2rem;
+    width: 50vw;
+    min-width: 150px;
+    padding: 1rem 2rem;
     background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 20px;
     cursor: pointer;
     font-size: 1rem;
     transition: background-color 0.2s;
@@ -541,17 +634,58 @@ const CreateMsgButton = styled.button`
     }
 `;
 
-const H4 = styled.h4`
+const H3 = styled.h3`
+    margin: 1.5rem;
+    font-size: 1.2rem;
+`
 
+const H4 = styled.h4`
+    font-size: 0.8rem;
+    margin: 0;
+`
+
+const GridWrapper = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    width: 100%;
+`
+
+const CustomerInfoInputContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+`
+
+const ContractInfoInputContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+`
+const ProviderInfoInputContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+`
+
+const ReceiptInfoInputContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
 `
 
 const SelectBox = styled.select`
-  padding: 0.5rem;
+    padding: 0.5rem;
     border: 1px solid #dee2e6;
     border-radius: 4px;
-    font-size: 1rem;
+    font-size: 0.8rem;
     width: 100%;
     margin-bottom: 1rem;
+    box-sizing: border-box;
 
     &:focus {
         outline: none;
@@ -585,5 +719,12 @@ const ModalContent = styled.div`
   display: flex; // To help center iframe if it's smaller
   flex-direction: column; // Stack elements if you add a close button later
 `;
+
+const SectionDivider = styled.div`
+    width: 100%;
+    height: 1px;
+    background-color: #dee2e6;
+    margin: 1rem 0;
+`
 
 export default CustomerContract;

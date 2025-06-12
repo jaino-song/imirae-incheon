@@ -26,7 +26,7 @@ const MobileMenu = ({ setIsMenuOpen, isMenuOpen }) => {
                     <MobileNavButton link="/reminder" onClick={handleClose}>상담 후 리마인더</MobileNavButton>
                     <MobileNavButton link="/thanks" onClick={handleClose}>예약 완료</MobileNavButton>
                     <MobileNavButton link="/survey" onClick={handleClose}>모니터링 설문</MobileNavButton>
-                    <MobileNavButton link="/contract" onClick={handleClose}>산모계약서</MobileNavButton>
+                    <MobileNavButton link="/contract" onClick={handleClose}>전자계약서</MobileNavButton>
                 </Nav>
             </NavContainer>
             <Container isClosing={isClosing} onClick={handleClose} />
