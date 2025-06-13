@@ -9,7 +9,6 @@ import PriceInfo from './components/functions/PriceInfo';
 import Reminder from './components/functions/Reminder';
 import Thanks from './components/functions/Thanks';
 import Survey from './components/functions/Survey';
-import Test from './components/functions/Test';
 import CustomerContract from './components/functions/CustomerContract';
 
 const router = createBrowserRouter([
@@ -24,7 +23,6 @@ const router = createBrowserRouter([
       { path: "/reminder", element: <Reminder /> },
       { path: "/thanks", element: <Thanks /> },
       { path: "/survey", element: <Survey /> },
-      { path: "/test", element: <Test /> },
       { path: "/contract", element: <CustomerContract /> },
     ]
   }
