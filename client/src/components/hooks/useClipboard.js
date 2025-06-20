@@ -1,9 +1,9 @@
-import { use, useState } from 'react';
+import { useCallback } from 'react';
 
 const useClipboard = () => {
     const [copied, setCopied] = useState(false);
 
-    const copyToClipboard = async (text) => {
+    const copyToClipboard = useCallback(async (text) => {
         try {
             await navigator.clipboard.writeText(text);
             setCopied(true);
@@ -12,7 +12,7 @@ const useClipboard = () => {
         catch (error) {
             console.error('Failed to copy', error);
         }
-    };
+    }, []);
 
     return { copied, copyToClipboard };
 };

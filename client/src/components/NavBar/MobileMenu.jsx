@@ -3,7 +3,7 @@ import MobileNavButton from "./MobileNavButton";
 import { ImCross } from "react-icons/im";
 import { useState } from "react";
 
-const MobileMenu = ({ setIsMenuOpen, isMenuOpen }) => {
+const MobileMenu = ({ setIsMenuOpen }) => {
     const [isClosing, setIsClosing] = useState(false);
 
     const handleClose = () => {

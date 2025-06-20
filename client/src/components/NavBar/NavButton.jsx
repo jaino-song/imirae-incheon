@@ -19,11 +19,11 @@ const Button = styled.button`
     text-decoration: none;
     cursor: pointer;
 
-    a:first-child & {
+    a:first-of-type & {
         margin-left: 2em;
     }
 
-    a:last-child & {
+    a:last-of-type & {
         margin-right: 2em;
     }
 `

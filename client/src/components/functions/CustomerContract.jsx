@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { loadScripts, getDocumentOptions } from "../hooks/useDocAPI";
 import useEformsignAuth from "../hooks/useEformsignAuth";
 import styled from "@emotion/styled";
-import useContractStore from "../../store/customerStore";
+import useContractStore from "../../store/customerStore.ts";
 
 // Using global states inside a zustand store
 const CustomerContract = () => {
@@ -59,6 +59,8 @@ const CustomerContract = () => {
     setReceiptMonth,
     setReceiptDay,
 
+    setPriceData,
+    resetStore
   } = useContractStore();
 
   // eformsign auth hook
@@ -148,14 +150,14 @@ const CustomerContract = () => {
     if (startYear && startMonth && startDay) {
       setStartDate(`${startYear}${startMonth}${startDay}`);
     }
-  }, [startYear, startMonth, startDay]);
+  }, [setStartDate, startYear, startMonth, startDay]);
 
   // set end date when end year, month, and day are set or changed
   useEffect(() => {
     if (endYear && endMonth && endDay) {
       setEndDate(`${endYear}${endMonth}${endDay}`);
     }
-  }, [endYear, endMonth, endDay]);
+  }, [setEndDate, endYear, endMonth, endDay]);
 
   // set contract duration when start date and end date are set or changed
   useEffect(() => {
@@ -293,6 +295,12 @@ const CustomerContract = () => {
     } else {
         setIsLoading(true);
         console.log('[handleCreateContract] Already authenticated. setIsLoading(true) - Modal should be visible.');
+    }
+
+    try {
+      await openEformsign();
+    } catch {
+      console.error("Failed to open eformsign");
     }
   }
 

@@ -1,3 +1,4 @@
+import React from "react";
 import { act } from 'react';
 import useContractStore from '../../store/customerStore';
 
@@ -18,6 +19,7 @@ export const loadScript = (src) => {
     try {
       await loadScript('https://www.eformsign.com/plugins/jquery/jquery.min.js');
       await loadScript('https://www.eformsign.com/lib/js/efs_embedded_v2.js');
+      console.log("All scripts loaded successfully");
     } catch (error) {
       console.error('Error loading eFormSign scripts:', error);
     }
