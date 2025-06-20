@@ -33,17 +33,17 @@ export default [
   },
   {
     files: ['**/*.test.{js,jsx}'],
-    plugins: {
-      jest,
-    },
+    ...jest.configs['flat/recommended'],
     languageOptions: {
       globals: {
         ...globals.jest,
         ...globals.node,
       },
     },
-    rules: {
-      ...jest.configs.recommended.rules,
+    settings: {
+      jest: {
+        version: 'detect',
+      },
     },
   },
 ]
