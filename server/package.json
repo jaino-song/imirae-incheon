@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Backend server for imirae-incheon application with eformsign integration",
   "main": "server.js",
-  "type": "module",
   "scripts": {
     "start": "node server.js",
     "dev": "npx nodemon server.js",

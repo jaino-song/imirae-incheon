@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 const useClipboard = () => {
     const [copied, setCopied] = useState(false);

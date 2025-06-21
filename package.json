@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "This is a full-stack web application built with a modern JavaScript stack, featuring a React frontend and an Express.js backend. The core functionality revolves around digital document management, leveraging an integration with the eFormSign API.",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "cd server && npm install && node server.js",
     "build": "cd client && npm install && npm run build",
