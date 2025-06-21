@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useId } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { loadScripts, getDocumentOptions } from "../hooks/useDocAPI";
 import useEformsignAuth from "../hooks/useEformsignAuth";
 import styled from "@emotion/styled";
@@ -6,7 +6,6 @@ import useContractStore from "../../store/customerStore.ts";
 
 // Using global states inside a zustand store
 const CustomerContract = () => {
-  const birthdayId = useId();
   const {
     customerName,
     customerContact,
@@ -25,6 +24,7 @@ const CustomerContract = () => {
     endMonth,
     endDay,
     endDate,
+    contractDuration,
 
     paymentYear,
     paymentMonth,
@@ -59,8 +59,8 @@ const CustomerContract = () => {
     setReceiptMonth,
     setReceiptDay,
 
-    //setPriceData,
-    //resetStore
+    setPriceData,
+    resetStore
   } = useContractStore();
 
   // eformsign auth hook
@@ -164,7 +164,7 @@ const CustomerContract = () => {
     if (startDate && endDate) {
       setContractDuration(`${startDate}~${endDate}`);
     }
-  }, [startDate, endDate, setContractDuration]);
+  }, [startDate, endDate]);
 
   // Memoize callbacks to prevent re-creation on every render unless dependencies change
   // success_callback is called when the document is successfully signed
@@ -264,7 +264,7 @@ const CustomerContract = () => {
         setIsLoading(false);
       }
     }
-  }, [isLoading, isAuthenticated, accessToken, refreshToken, success_callback, error_callback, action_callback, setIsLoading]);
+  }, [isLoading, isAuthenticated, accessToken, refreshToken, getDocumentOptions, success_callback, error_callback, action_callback, setIsLoading]);
 
   // handleCreateContract is called when the create contract button is clicked
   // it checks if the customer name and contact are set
@@ -290,12 +290,17 @@ const CustomerContract = () => {
         setIsLoading(true);
       } catch (error) {
         alert('인증에 실패했습니다. 관리자에게 문의하세요.');
-        console.error('[handleCreateContract] Error during authentication:', error);
         return;
       }
     } else {
         setIsLoading(true);
         console.log('[handleCreateContract] Already authenticated. setIsLoading(true) - Modal should be visible.');
+    }
+
+    try {
+      await openEformsign();
+    } catch {
+      console.error("Failed to open eformsign");
     }
   }
 
@@ -304,22 +309,47 @@ const CustomerContract = () => {
       <Container>
         <Title>전자계약서 작성</Title>
         <H3>산모님 인적사항</H3>
-        <InputContainer>
-          <Label>성함</Label>
-          <Input type="text" value={customerName} onChange={(e) => setCustomerName(e.target.value)} />
-        </InputContainer>
-        <InputContainer>
-          <Label htmlFor={birthdayId}>생년월일</Label>
-          <Input type="text" id={birthdayId} value={customerDOB} onChange={(e) => setCustomerDOB(e.target.value)} maxLength="8" placeholder="생년월일 숫자만 8자리 입력  예시) 19900101" />
-        </InputContainer>
-        <InputContainer>
-          <Label>휴대전화</Label>
-          <Input type="text" value={customerContact} onChange={(e) => setCustomerContact(e.target.value)} maxLength="11" placeholder="휴대전화 숫자만 11자리 입력  예시) 01012345678" />
-        </InputContainer>
-        <InputContainer>
-          <Label>주소</Label>
-          <Input type="text" value={customerAddress} onChange={(e) => setCustomerAddress(e.target.value)} />
-        </InputContainer>
+        <GridWrapper>
+          <CustomerInfoInputContainer>
+            <H4>산모님 성함</H4>
+            <InputField
+              type="text"
+              placeholder="산모님 이름을 입력하세요"
+              onChange={(e) => setCustomerName(e.target.value)}
+              value={customerName}
+            />
+          </CustomerInfoInputContainer>
+
+          <CustomerInfoInputContainer>
+          <H4>산모님 휴대전화 번호</H4>
+            <InputField
+              type="text"
+              placeholder="산모님 휴대전화 번호을 입력하세요"
+              onChange={(e) => setCustomerContact(e.target.value)}
+              value={customerContact}
+            />
+          </CustomerInfoInputContainer>
+
+          <CustomerInfoInputContainer>
+            <H4>산모님 생년월일</H4>
+            <InputField
+              type="text"
+              placeholder="생년월일 6자리 (YYMMDD)"
+              onChange={(e) => setCustomerDOB(e.target.value)}
+              value={customerDOB}
+            />
+          </CustomerInfoInputContainer>
+
+          <CustomerInfoInputContainer>
+            <H4>산모님 주소</H4>
+            <InputField
+              type="text"
+              placeholder="산모님 주소를 입력하세요"
+              onChange={(e) => setCustomerAddress(e.target.value)}
+              value={customerAddress}
+            />
+          </CustomerInfoInputContainer>
+        </GridWrapper>
 
         <SectionDivider />
 
@@ -701,28 +731,6 @@ const SectionDivider = styled.div`
     height: 1px;
     background-color: #dee2e6;
     margin: 1rem 0;
-`
-
-const InputContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    width: 100%;
-`
-
-const Label = styled.label`
-    font-size: 0.8rem;
-    margin: 0;
-`
-
-const Input = styled.input`
-    padding: 0.5rem;
-    border: 1px solid #dee2e6;
-    width: 100%;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    margin-bottom: 1rem;
-    box-sizing: border-box;
 `
 
 export default CustomerContract;
