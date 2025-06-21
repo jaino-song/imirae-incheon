@@ -2,7 +2,7 @@
   "name": "imirae-incheon-root",
   "private": true,
   "scripts": {
-    "vercel-build": "npm run build --prefix client"
+    "vercel-build": "cd client && npm install && npm run build && cd ../server && npm install && echo '--- Server Directory Contents ---' && ls -R"
   },
   "workspaces": [
     "client",
