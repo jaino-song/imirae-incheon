@@ -44,7 +44,8 @@ const useEformsignAuth = () => {
         try {
             const executionTime = Date.now();
 
-            const response = await fetch(`${API_BASE_URL}/api/access-token`, {
+            //const response = await fetch(`${API_BASE_URL}/api/access-token`, {
+            const response = await fetch(`http://localhost:5005/api/access-token`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
