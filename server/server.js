@@ -17,9 +17,10 @@ const path = require('path'); // Original 'path' for other uses
 
 const app = express();
 const PORT = process.env.PORT || 5000; // PORT should be read after dotenv.config()
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 
 // CORS configuration
-const whitelist = ['https://imirae-incheon-client.vercel.app', 'http://localhost:5173'];
+const whitelist = [FRONTEND_URL];
 const corsOptions = {
   origin: function (origin, callback) {
     console.log('CORS Origin received:', origin);
@@ -59,7 +60,6 @@ app.get('*', (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
 });
 
 module.exports = app; 
