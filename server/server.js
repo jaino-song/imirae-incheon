@@ -19,7 +19,7 @@ const app = express();
 const PORT = process.env.PORT || 5000; // PORT should be read after dotenv.config()
 
 // CORS configuration
-const whitelist = ['https://imirae-incheon-client.vercel.app', 'http://localhost:5173'];
+const whitelist = ['https://imirae-incheon-client.vercel.app/', 'http://localhost:5173'];
 const corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1 || !origin) {
