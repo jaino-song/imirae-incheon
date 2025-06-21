@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import MobileMenu from './MobileMenu';
 import logo from '../../assets/logo.png';
-import styled from "@emotion/styled";
 
 const MobileNav = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);

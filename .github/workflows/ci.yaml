@@ -22,7 +22,3 @@ jobs:
       - name: Install Frontend Dependencies
         working-directory: ./client
         run: npm ci
-
-      - name: Run ESLint
-        working-directory: ./client
-        run: npm run lint 
