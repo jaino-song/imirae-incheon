@@ -106,6 +106,5 @@ router.post('/refresh-token', async (req, res) => {
   }
 });
 
-// --------------------------------------------------
-// Export the router as the default export
-export default router;
+//
+module.exports = router;
