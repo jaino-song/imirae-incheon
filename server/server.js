@@ -27,13 +27,12 @@ const eformsignRoutes = require('./routes/eformsign');
 app.use('/api', eformsignRoutes);
 
 // Serve static files from the React app build
-const staticPath = path.join(process.cwd(), 'dist');
-app.use(express.static(staticPath));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
 app.get('*', (req, res) => {
-  res.sendFile(path.join(process.cwd(), 'dist/index.html'));
+  res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 
 app.listen(PORT, () => {
