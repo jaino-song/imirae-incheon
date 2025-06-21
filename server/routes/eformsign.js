@@ -81,8 +81,6 @@ router.post('/generate-signature', async (req, res) => {
     const { executionTime } = req.body;
     const privateKey = process.env.EFORMSIGN_PRIVATE_KEY;
 
-    console.log('[DEBUG] EFORMSIGN_PRIVATE_KEY for /generate-signature:', privateKey ? 'Exists' : 'MISSING!');
-
     if (!privateKey) {
       console.error('EFORMSIGN_PRIVATE_KEY is not set. Check .env and server restart.');
       return res.status(500).json({ error: 'EFORMSIGN_PRIVATE_KEY 환경변수가 설정되지 않았습니다.' });
