@@ -1,6 +1,4 @@
 import styled from "@emotion/styled";
-import { Link } from "react-router-dom";
-import { ImCross } from "react-icons/im";
 import logo from "../../assets/logo.png";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { useState } from "react";
