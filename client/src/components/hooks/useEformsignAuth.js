@@ -84,22 +84,20 @@ const useEformsignAuth = () => {
 
         try {
             const executionTime = Date.now();
-            const signature = await generateSignature(executionTime);
-
-            const response = await fetch('https://service.eformsign.com/v2.0/api_auth/refresh_token', {
+            const response = await fetch('/api/refresh-token', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'eformsign_signature': signature,
                 },
                 body: JSON.stringify({
-                    execution_time: executionTime,
-                    refresh_token: refreshToken
+                    executionTime: executionTime,
+                    refreshToken: refreshToken
                 })
             });
 
             if (!response.ok) {
-                throw new Error(`토큰 갱신 실패: ${response.status}`);
+                const errorData = await response.json();
+                throw new Error(`토큰 갱신 실패: ${response.status} - ${errorData.error || 'Unknown error'}`);
             }
 
             const data = await response.json();

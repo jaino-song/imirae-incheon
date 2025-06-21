@@ -159,4 +159,39 @@ router.post('/access-token', async (req, res) => {
   }
 });
 
+router.post('/refresh-token', async (req, res) => {
+    const { executionTime, refreshToken } = req.body;
+    const privateKey = process.env.EFORMSIGN_PRIVATE_KEY;
+
+    if (!refreshToken) {
+        return res.status(400).json({ error: 'Refresh token is required' });
+    }
+
+    try {
+        const signature = generateEcdsaSignature(executionTime.toString(), privateKey);
+        const eformsignRes = await fetch('https://service.eformsign.com/v2.0/api_auth/refresh_token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'eformsign_signature': signature
+            },
+            body: JSON.stringify({
+                execution_time: executionTime,
+                refresh_token: refreshToken,
+            })
+        });
+
+        const data = await eformsignRes.json();
+
+        if (!eformsignRes.ok) {
+            return res.status(eformsignRes.status).json({ error: data.err_msg || 'Failed to refresh token' });
+        }
+        
+        res.json(data);
+    } catch (error) {
+        console.error('Error refreshing token:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 module.exports = router;
