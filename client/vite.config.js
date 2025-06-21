@@ -15,7 +15,4 @@ export default defineConfig({
       }
     }
   }
-  // The 'build.outDir' configuration has been removed. 
-  // Vite will now use the default output directory 'dist' within the 'client' folder,
-  // which aligns with the '@vercel/static-build' settings in vercel.json.
 })
