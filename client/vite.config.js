@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,5 +15,9 @@ export default defineConfig({
         // rewrite: (path) => path.replace(/^\/api/, '') 
       }
     }
+  },
+  build: {
+    // Output the built files to a 'dist' directory inside the server folder
+    outDir: path.resolve(__dirname, '../server/dist')
   }
 })

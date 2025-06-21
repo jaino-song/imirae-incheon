@@ -1,24 +1,11 @@
 {
-  "name": "imirae-incheon",
-  "version": "1.0.0",
-  "description": "This is a full-stack web application built with a modern JavaScript stack, featuring a React frontend and an Express.js backend. The core functionality revolves around digital document management, leveraging an integration with the eFormSign API.",
-  "main": "index.js",
+  "name": "imirae-incheon-root",
+  "private": true,
   "scripts": {
-    "start": "cd server && npm install && node server.js",
-    "build": "cd client && npm install && npm run build",
-    "heroku-postbuild": "npm run build",
-    "vercel-build": "cd client && npm install && npm run build && echo '--- Contents of server.js ---' && cat ../server/server.js && cd ../server && npm install",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "vercel-build": "npm run build --prefix client"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jaino-song/imirae-incheon.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/jaino-song/imirae-incheon/issues"
-  },
-  "homepage": "https://github.com/jaino-song/imirae-incheon#readme"
+  "workspaces": [
+    "client",
+    "server"
+  ]
 }
