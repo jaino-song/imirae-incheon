@@ -26,14 +26,16 @@ app.use(express.json());
 const eformsignRoutes = require('./routes/eformsign');
 app.use('/api', eformsignRoutes);
 
-// Serve static files from React app in production
+// The static file serving logic below is now handled by vercel.json routes
+// and should be removed to prevent conflicts in the serverless environment.
+/*
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../client/dist')));
-    
-    app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, '../client/dist/index.html'));
-    });
+  app.use(express.static(path.join(__dirname, 'dist')));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist/index.html'));
+  });
 }
+*/
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

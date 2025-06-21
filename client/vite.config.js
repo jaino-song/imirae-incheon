@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -15,8 +14,8 @@ export default defineConfig({
         // rewrite: (path) => path.replace(/^\/api/, '') 
       }
     }
-  },
-  build: {
-    outDir: path.resolve(__dirname, '../server/dist')
   }
+  // The 'build.outDir' configuration has been removed. 
+  // Vite will now use the default output directory 'dist' within the 'client' folder,
+  // which aligns with the '@vercel/static-build' settings in vercel.json.
 })
