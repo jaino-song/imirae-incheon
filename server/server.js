@@ -18,8 +18,20 @@ const path = require('path'); // Original 'path' for other uses
 const app = express();
 const PORT = process.env.PORT || 5000; // PORT should be read after dotenv.config()
 
+// CORS configuration
+const whitelist = ['https://imirae-incheon-client.vercel.app', 'http://localhost:5173'];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Routes

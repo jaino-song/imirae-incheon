@@ -1,4 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
 const useEformsignAuth = () => {
     const [accessToken, setAccessToken] = useState('');
@@ -10,9 +12,9 @@ const useEformsignAuth = () => {
     const USER_EMAIL = "forchildrenbysongs@gmail.com";
 
     // 서명 생성 함수 - 서버에서 처리
-    const generateSignature = async (executionTime) => {
+    const generateSignature = useCallback(async (executionTime) => {
         try {
-            const response = await fetch('/api/generate-signature', {
+            const response = await fetch(`${API_BASE_URL}/api/generate-signature`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -32,15 +34,15 @@ const useEformsignAuth = () => {
             console.error('서명 생성 실패:', error);
             throw error;
         }
-    };
+    }, []);
 
     // 토큰 발급 함수 - 서버 프록시를 통해 처리
-    const getAccessToken = async () => {
+    const getAccessToken = useCallback(async () => {
         setIsLoading(true);
         try {
             const executionTime = Date.now();
 
-            const response = await fetch('/api/access-token', {
+            const response = await fetch(`${API_BASE_URL}/api/access-token`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -74,17 +76,18 @@ const useEformsignAuth = () => {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, []);
 
     // 토큰 갱신 함수
-    const refreshAccessToken = async () => {
+    const refreshAccessToken = useCallback(async () => {
         if (!refreshToken) {
+            console.error('No refresh token available to refresh.');
             throw new Error('Refresh token이 없습니다.');
         }
 
         try {
             const executionTime = Date.now();
-            const response = await fetch('/api/refresh-token', {
+            const response = await fetch(`${API_BASE_URL}/api/refresh-token`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -114,7 +117,7 @@ const useEformsignAuth = () => {
             setIsAuthenticated(false);
             throw error;
         }
-    };
+    }, []);
 
     // 컴포넌트 마운트 시 저장된 토큰 복원
     useEffect(() => {
