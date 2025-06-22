@@ -17,7 +17,7 @@ const path = require('path'); // Original 'path' for other uses
 
 const app = express();
 const PORT = process.env.PORT || 5000; // PORT should be read after dotenv.config()
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+const FRONTEND_URL = process.env.FRONTEND_URL;
 
 // CORS configuration
 const whitelist = [FRONTEND_URL];

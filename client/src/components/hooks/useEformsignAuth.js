@@ -1,8 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 
 // Ensure no trailing slash to avoid `//api` in request URLs which can trigger unwanted redirects/CORS issues
-const RAW_API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
-const API_BASE_URL = RAW_API_BASE_URL.replace(/\/$/, '');
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const useEformsignAuth = () => {
     const [accessToken, setAccessToken] = useState('');
@@ -45,7 +44,7 @@ const useEformsignAuth = () => {
             const executionTime = Date.now();
 
             //const response = await fetch(`${API_BASE_URL}/api/access-token`, {
-            const response = await fetch(`http://localhost:5005/api/access-token`, {
+            const response = await fetch(`${API_BASE_URL}/api/access-token`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
