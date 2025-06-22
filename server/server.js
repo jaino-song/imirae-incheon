@@ -45,6 +45,11 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
+// Add a root route for testing
+app.get('/', (req, res) => {
+  res.send('server is running');
+});
+
 // Routes
 const eformsignRoutes = require('./routes/eformsign');
 app.use('/api', eformsignRoutes);
