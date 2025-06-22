@@ -6,7 +6,6 @@
   "scripts": {
     "start": "node server.js",
     "dev": "npx nodemon server.js",
-    "vercel-build": "npm install --prefix ../client && npm run build --prefix ../client",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
