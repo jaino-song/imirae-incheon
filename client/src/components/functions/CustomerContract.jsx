@@ -6,11 +6,6 @@ import useContractStore from "../../store/customerStore.ts";
 
 // Using global states inside a zustand store
 const CustomerContract = () => {
-  // scroll to the top of the page on component mount
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   const {
     customerName,
     customerContact,
