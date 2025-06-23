@@ -1,6 +1,7 @@
 import PriceMainContent from "../MainContent/PriceMainContent";
 
 const PriceInfo = () => {
+
     const preText = `[인천 아이미래로]
 
 {name} 산모님~♡ 

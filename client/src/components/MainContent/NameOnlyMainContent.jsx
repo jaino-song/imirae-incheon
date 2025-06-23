@@ -1,10 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import FormContainer from "../FormContainer/FormContainer";
 
 const NameOnlyMainContent = (props) => {
     const [showMsg, setShowMsg] = useState(false);
     const [msg, setMsg] = useState('');
+
+    useEffect(() => {
+        if (showMsg) {
+            window.scrollTo({
+                top: 1000,
+                behavior: 'smooth'
+            });
+        }
+    }, [showMsg]);
 
     const handleNameChange = (e) => {
         const name = e.target.value;

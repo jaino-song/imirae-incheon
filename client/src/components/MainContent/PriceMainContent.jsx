@@ -30,6 +30,15 @@ const PriceMainContent = (props) => {
     // useSupabase custom hook
     const { fetchVoucherData, fetchBankData } = useSupabase();
 
+    useEffect(() => {
+        if (showMsg) {
+            window.scrollTo({
+                top: 1000,
+                behavior: 'smooth'
+            });
+        }
+    }, [showMsg]);
+
     const weeksCalculator = (day) => {
         if (day > 5) return Math.floor(day / 5);
         else return 1;
@@ -293,7 +302,7 @@ const OptionGroup = styled.optgroup`
 `;
 
 const CreateMsgButton = styled.button`
-    margin: 2rem;
+    margin: 1rem;
     width: 50vw;
     min-width: 150px;
     padding: 1rem 2rem;
@@ -317,6 +326,7 @@ const CreateMsgButton = styled.button`
 const H3 = styled.h3`
     display: inline-block;
     font-size: 1rem;
+    font-weight: normal;
     margin: 0;
 `
 const H4 = styled.h4`

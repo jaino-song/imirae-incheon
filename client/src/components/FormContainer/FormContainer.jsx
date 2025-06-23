@@ -67,7 +67,7 @@ const Textarea = styled.textarea`
 `;
 
 const CopyButton = styled.button`
-    margin: 2rem;
+    margin: 1rem;
     width: 50vw;
     min-width: 150px;
     padding: 1rem 2rem;
