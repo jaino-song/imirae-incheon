@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MainContent from "../MainContent/MainContent";
 
 const Greetings = () => {
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
     const [text] = useState(
         `[인천 아이미래로]
         안녕하세요, 인천 아이미래로 입니다 :)
